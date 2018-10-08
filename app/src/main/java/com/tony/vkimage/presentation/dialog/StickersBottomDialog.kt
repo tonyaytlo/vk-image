@@ -37,6 +37,14 @@ class StickersBottomDialog : BottomSheetDialogFragment() {
             inflater.inflate(R.layout.fragment_dialog_stickers, container, false)
 
 
+//    override fun onResume() {
+//        super.onResume()
+//        val params = dialog.window!!.attributes
+//        params.width = LayoutParams.MATCH_PARENT
+//        params.height = LayoutParams.MATCH_PARENT
+//        dialog.window!!.attributes = params as android.view.WindowManager.LayoutParams
+//    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         getStickers()
@@ -48,7 +56,10 @@ class StickersBottomDialog : BottomSheetDialogFragment() {
 
     private fun showStickers(stickers: MutableList<Sticker>) {
         val adapter = StickerAdapter(activity!!, stickers,
-                { sticker -> stickerPickListener?.onStickerPicked(sticker) })
+                { sticker ->
+                    stickerPickListener?.onStickerPicked(sticker)
+                    dismiss()
+                })
         rvStickers.setHasFixedSize(true)
         rvStickers.layoutManager = GridLayoutManager(activity, SPAN_COUNT)
         rvStickers.adapter = adapter
