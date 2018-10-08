@@ -32,5 +32,4 @@ fun <T : View?> RecyclerView.ViewHolder.bind(@IdRes idRes: Int): Lazy<T> {
     return unsafelazy { itemView!!.findViewById<T>(idRes) as T }
 }
 
-
 private fun <T> unsafelazy(initializer: () -> T) = lazy(LazyThreadSafetyMode.NONE, initializer)
