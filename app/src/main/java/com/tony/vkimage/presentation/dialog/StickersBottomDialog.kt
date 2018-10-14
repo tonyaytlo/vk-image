@@ -8,8 +8,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.tony.tinkoffnews.presentation.view.adapter.StickerAdapter
+import com.tony.vkimage.NewsApp
 import com.tony.vkimage.R
-import com.tony.vkimage.data.StickerManager
 import com.tony.vkimage.data.entity.Sticker
 import com.tony.vkimage.presentation.StickerPickListener
 import ru.galt.app.extensions.bind
@@ -18,6 +18,7 @@ import ru.galt.app.extensions.bind
 class StickersBottomDialog : BottomSheetDialogFragment() {
 
     companion object {
+        const val TAG = "StickersBottomDialog"
         private const val SPAN_COUNT = 4
     }
 
@@ -51,11 +52,12 @@ class StickersBottomDialog : BottomSheetDialogFragment() {
     }
 
     private fun getStickers() {
-        showStickers(StickerManager().getStickers(activity!!))
+        val stickers = NewsApp.stickerRepository.getStickers(activity!!.applicationContext)
+        showStickers(stickers ?: mutableListOf())
     }
 
     private fun showStickers(stickers: MutableList<Sticker>) {
-        val adapter = StickerAdapter(activity!!, stickers,
+        val adapter = StickerAdapter(activity!!.applicationContext, stickers,
                 { sticker ->
                     stickerPickListener?.onStickerPicked(sticker)
                     dismiss()
@@ -64,6 +66,7 @@ class StickersBottomDialog : BottomSheetDialogFragment() {
         rvStickers.layoutManager = GridLayoutManager(activity, SPAN_COUNT)
         rvStickers.adapter = adapter
     }
+
 
     override fun onDestroy() {
         super.onDestroy()

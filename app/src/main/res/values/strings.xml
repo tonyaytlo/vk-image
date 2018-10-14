@@ -3,4 +3,5 @@
 
     <string name="title">Новая запись</string>
     <string name="stickers">Стикеры</string>
+    <string name="et_story_hint">Что у Вас нового?</string>
 </resources>
