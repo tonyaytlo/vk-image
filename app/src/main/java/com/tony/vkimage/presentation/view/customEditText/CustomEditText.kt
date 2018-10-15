@@ -30,20 +30,14 @@ class CustomEditText : AppCompatEditText {
     private val backgroundPath = Path()
 
 
-    constructor(context: Context) : super(context) {
-        init()
-    }
+    constructor(context: Context) : super(context)
 
-    constructor(context: Context, attrs: AttributeSet?) : super(context, attrs) {
-        init()
-    }
+    constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
 
     constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) :
-            super(context, attrs, defStyleAttr) {
-        init()
-    }
+            super(context, attrs, defStyleAttr)
 
-    private fun init() {
+    init {
         //ET STYLING
         setBackgroundResource(0)
         textAlignment = View.TEXT_ALIGNMENT_CENTER
@@ -53,7 +47,7 @@ class CustomEditText : AppCompatEditText {
     }
 
 
-    public fun setStyle(styleBackground: Int) {
+    fun setStyle(styleBackground: Int) {
         selectedStyle = styleBackground
         preparePath()
         invalidate()
@@ -69,14 +63,17 @@ class CustomEditText : AppCompatEditText {
         for (i in 0 until lineCount) {
             linesRect.add(RectView())
             linesRect[i].height = lineHeight
-            if (layout.text.substring(layout.getLineStart(i),
-                            layout.getLineEnd(i)).trimLine.isEmpty()) {
-                continue // this is empty line, force width 0
+            if (isEmptyLine(i)) {
+                continue // width = 0
             }
-            linesRect[i].width = layout.getLineWidth(i).toInt()
+            linesRect[i].width = layout.getLineWidth(i).toInt() + paddingLeft + paddingRight
         }
         onRemeasureBackground()
     }
+
+    private fun isEmptyLine(index: Int) = layout.text.substring(layout.getLineStart(index),
+            layout.getLineEnd(index)).trimLine.isEmpty()
+
 
     private fun onRemeasureBackground() {
         var i = 0
@@ -89,12 +86,12 @@ class CustomEditText : AppCompatEditText {
                     (linesRect[i].width - linesRect[i + 1].width).absoluteValue < smoothing) { /// если их ширина не сильно отличается
                 if (linesRect[i + 1].width > linesRect[i].width) {//приводим их к большей ширине
                     linesRect[i].width = linesRect[i + 1].width
+                    if (i > 0) {
+                        i-- // go back to remeasure
+                        continue
+                    }
                 } else {
                     linesRect[i + 1].width = linesRect[i].width
-                }
-                if (i > 0) {
-                    i-- // go back to remeasure
-                    continue
                 }
             }
             i++
@@ -103,11 +100,10 @@ class CustomEditText : AppCompatEditText {
     }
 
     private fun onLayoutBackground() {
+        var prevRect: RectView? = null
         for (i in 0 until linesRect.size) {
             val lineRect = linesRect[i]
-            if (lineRect.width == 0) {
-                continue
-            }
+
             val left: Int
             val top: Int
             val right: Int
@@ -118,20 +114,30 @@ class CustomEditText : AppCompatEditText {
                 val centerRect = (lineRect.width / 2)
 
                 left = centerX - centerRect
-                top = lineHeight * i + paddingTop + 2.dpToPx// PREV
+                top = if (prevRect == null) {
+                    paddingTop + 4.dpToPx
+                } else {
+                    prevRect.bottom
+                }
                 right = left + lineRect.width
                 bottom = top + lineRect.height
             } else {
                 left = 0
-                top = lineHeight * i
+                top = if (prevRect == null) {
+                    paddingTop
+                } else {
+                    prevRect.bottom
+                }
                 right = lineRect.width
-                bottom = top + lineHeight
+                bottom = top + lineRect.height
             }
 
             lineRect.left = left
             lineRect.top = top
             lineRect.right = right
             lineRect.bottom = bottom
+
+            prevRect = lineRect
         }
         preparePath()
     }
@@ -179,16 +185,15 @@ class CustomEditText : AppCompatEditText {
         }
     }
 
-
-    override fun onDraw(canvas: Canvas?) {
+    override fun onDraw(canvas: Canvas) {
         if (selectedStyle != STYLE_TRANSPARENT_BACKGROUND) {
             drawBackground(canvas, backgroundPaint)
         }
         super.onDraw(canvas)
     }
 
-    private fun drawBackground(canvas: Canvas?, backgroundPaint: Paint) {
-        canvas?.drawPath(backgroundPath, backgroundPaint)
+    private fun drawBackground(canvas: Canvas, backgroundPaint: Paint) {
+        canvas.drawPath(backgroundPath, backgroundPaint)
     }
 
     private fun pathLineBackground(left1: Float, top: Float, right1: Float, bottom: Float,
@@ -197,7 +202,7 @@ class CustomEditText : AppCompatEditText {
         val leftOrRight = if (topSide) left1 else right1
         val rightOrLeft = if (topSide) right1 else left1
 
-        if (cuerve) {//positive positive curve
+        if (cuerve) {//positive curve
             if (topSide) {
                 path.moveTo(leftOrRight, topOrBottom + cornerRadius)
             } else {
@@ -224,65 +229,3 @@ class CustomEditText : AppCompatEditText {
         }
     }
 }
-
-
-//private fun preparePath() {
-//    path.rewind() // clear without recreate
-//    for (i in 0 until linesRect.size) {
-//        val lineRect = linesRect[i]
-//
-//        if (lineRect.width == 0) { //skip empty line
-//            continue
-//        }
-//        //
-//        var topCornerRadius = cornerRadius
-//        var bottomCornerRadius = cornerRadius
-//        //
-//        val left = lineRect.left.toFloat()
-//        val top = lineRect.top.toFloat()
-//        val right = lineRect.right.toFloat()
-//        val bottom = lineRect.bottom.toFloat()
-//
-//
-//        if (i == 0 || linesRect[i - 1].width == 0 || linesRect[i - 1].width <= lineRect.width) {
-//            if (i != 0 && linesRect[i - 1].width == lineRect.width) {
-//                topCornerRadius = 0F
-//            }
-//            drawRoundPath(left, top, right, bottom, topCornerRadius, true, path = path)
-////                path.moveTo(left, top + topCornerRadius)
-////                path.quadTo(left, top, left + topCornerRadius, top)
-////                path.lineTo(right - topCornerRadius, top)
-////                path.quadTo(right, top, right, top + topCornerRadius)
-//
-//        } else {
-//            drawRoundPath(left, top, right, bottom, topCornerRadius, false, path = path)
-////                path.moveTo(left, top + topCornerRadius)
-////                path.quadTo(left, top + topCornerRadius / 4, left - topCornerRadius, top)
-////                path.lineTo(right + topCornerRadius, top)
-////                path.quadTo(right, top + topCornerRadius / 4, right, top + topCornerRadius)
-//        }
-//
-//
-//        if (i + 1 >= linesRect.size || lineRect.width == 0 || (linesRect[i + 1].width <= linesRect[i].width)) {
-//            if (i + 1 < linesRect.size && linesRect[i + 1].width == lineRect.width) {
-//                bottomCornerRadius = 0F
-//            }
-//            drawRoundPath(left, top, right, bottom, -bottomCornerRadius, true, false, path, topCornerRadius)
-////
-////                path.lineTo(right, bottom - bottomCornerRadius)
-////                path.quadTo(right, bottom, right - bottomCornerRadius, bottom)
-////                path.lineTo(left + bottomCornerRadius, bottom)
-////                path.quadTo(left, bottom, left, bottom - bottomCornerRadius)
-////                path.lineTo(left, top + topCornerRadius)
-//        } else {
-//            drawRoundPath(left, top, right, bottom, -bottomCornerRadius, false, false, path, topCornerRadius)
-////
-////                path.lineTo(right, bottom - bottomCornerRadius)
-////                path.quadTo(right, bottom - bottomCornerRadius / 4, right + bottomCornerRadius, bottom)
-////                path.lineTo(left - bottomCornerRadius, bottom)
-////                path.quadTo(left, bottom - bottomCornerRadius / 4, left, bottom - bottomCornerRadius)
-////                path.lineTo(left, top + topCornerRadius)
-//        }
-//        path.close()
-//    }
-//}

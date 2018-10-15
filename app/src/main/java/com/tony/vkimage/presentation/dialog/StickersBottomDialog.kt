@@ -8,8 +8,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.tony.tinkoffnews.presentation.view.adapter.StickerAdapter
-import com.tony.vkimage.NewsApp
 import com.tony.vkimage.R
+import com.tony.vkimage.VkApp
 import com.tony.vkimage.data.entity.Sticker
 import com.tony.vkimage.presentation.StickerPickListener
 import ru.galt.app.extensions.bind
@@ -26,6 +26,7 @@ class StickersBottomDialog : BottomSheetDialogFragment() {
 
     private var stickerPickListener: StickerPickListener? = null
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (activity is StickerPickListener) {
@@ -38,21 +39,13 @@ class StickersBottomDialog : BottomSheetDialogFragment() {
             inflater.inflate(R.layout.fragment_dialog_stickers, container, false)
 
 
-//    override fun onResume() {
-//        super.onResume()
-//        val params = dialog.window!!.attributes
-//        params.width = LayoutParams.MATCH_PARENT
-//        params.height = LayoutParams.MATCH_PARENT
-//        dialog.window!!.attributes = params as android.view.WindowManager.LayoutParams
-//    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         getStickers()
     }
 
     private fun getStickers() {
-        val stickers = NewsApp.stickerRepository.getStickers(activity!!.applicationContext)
+        val stickers = VkApp.stickerRepository.getStickers(activity!!.applicationContext)
         showStickers(stickers ?: mutableListOf())
     }
 

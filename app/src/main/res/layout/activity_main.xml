@@ -36,12 +36,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar">
 
+        <ImageView
+            android:id="@+id/ivBackground"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="fitXY" />
+
         <com.tony.vkimage.presentation.view.movigViewsLayout.MovingViewsLayout xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/rlContainer"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:background="@color/colorPrimary">
+            android:layout_gravity="center">
 
 
         </com.tony.vkimage.presentation.view.movigViewsLayout.MovingViewsLayout>
@@ -53,8 +58,20 @@
             android:layout_gravity="center"
             android:hint="@string/et_story_hint"
             android:inputType="textMultiLine"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
             android:textSize="24sp"
             android:textStyle="bold" />
+
     </FrameLayout>
 
+
+    <com.tony.vkimage.presentation.view.bottomPanelView.BottomPanelView
+        android:id="@+id/bpPanel"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 </android.support.constraint.ConstraintLayout>

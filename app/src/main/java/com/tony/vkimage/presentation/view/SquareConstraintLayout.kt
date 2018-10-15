@@ -3,11 +3,36 @@ package com.tony.vkimage.presentation.view
 import android.content.Context
 import android.support.constraint.ConstraintLayout
 import android.util.AttributeSet
+import android.widget.FrameLayout
+import com.tony.vkimage.R
 
 class SquareConstraintLayout @JvmOverloads constructor(
         context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
-) : ConstraintLayout(context, attrs, defStyleAttr) {
+) : FrameLayout(context, attrs, defStyleAttr) {
+
+
+    private var horizontal = true
+
+    init {
+        if (attrs != null) {
+            val array = context.theme.obtainStyledAttributes(
+                    attrs,
+                    R.styleable.SquareConstraintLayout,
+                    0, 0
+            )
+            try {
+                horizontal = array.getBoolean(R.styleable.SquareConstraintLayout_horizontal, true)
+            } finally {
+                array.recycle()
+            }
+        }
+    }
+
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        super.onMeasure(widthMeasureSpec, widthMeasureSpec)
+        if (horizontal) {
+            super.onMeasure(widthMeasureSpec, widthMeasureSpec)
+        } else {
+            super.onMeasure(heightMeasureSpec, heightMeasureSpec)
+        }
     }
 }
