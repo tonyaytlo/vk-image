@@ -14,7 +14,6 @@ import android.view.ScaleGestureDetector
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams
-import android.widget.Toast
 import com.tony.tinkoffnews.extension.makeInvisible
 import com.tony.tinkoffnews.extension.makeVisible
 import com.tony.vkimage.presentation.view.movigViewsLayout.detectors.RotationGestureDetector
@@ -99,9 +98,7 @@ class MovingViewsLayout @JvmOverloads constructor(
 
             if (view.visibility != View.GONE && !mp.moved) {
                 if (height > b || l + width > r) {
-                    Toast.makeText(context, "Couldn't fit a child View, skipping it", Toast.LENGTH_SHORT)
-                            .show()
-                    Log.d("MEIN", "Couldn't fit a child View, skipping it")
+                    Log.e(TAG, "Couldn't fit a child View, skipping it")
                     continue
                 }
 
@@ -163,8 +160,7 @@ class MovingViewsLayout @JvmOverloads constructor(
 
         when (event.action and MotionEvent.ACTION_MASK) {
             MotionEvent.ACTION_DOWN -> {
-                prepareTouch(x, y)
-                if (selectedView == null) {
+                if (!prepareTouch(x, y)) {
                     return false
                 }
                 activePointerId = event.getPointerId(0)
@@ -173,8 +169,8 @@ class MovingViewsLayout @JvmOverloads constructor(
                 val pointerIndex = event.actionIndex
                 val xx = event.getX(pointerIndex)
                 val yy = event.getY(pointerIndex)
-                prepareTouch(xx, yy)
-                if (selectedView != null) {
+
+                if (prepareTouch(xx, yy)) {
                     activePointerId = event.getPointerId(pointerIndex)
                 }
             }
@@ -241,7 +237,6 @@ class MovingViewsLayout @JvmOverloads constructor(
 
     private fun cancelSelect() {
         if (selectedView != null) {
-            selectedView?.makeVisible()
             selectedView = null
         }
         onViewUnselected()
@@ -273,14 +268,16 @@ class MovingViewsLayout @JvmOverloads constructor(
         }
     }
 
-    private fun prepareTouch(x: Float, y: Float) {
+    private fun prepareTouch(x: Float, y: Float): Boolean {
         lastTouch = null
         selectedView = findChildViewInsideTouch(Math.round(x), Math.round(y))
         if (selectedView != null) {
             onViewSelected()
             bringChildToFront(selectedView)
             lastTouch = PointF(x, y)
+            return true
         }
+        return false
     }
 
     private fun onViewSelected() {
@@ -294,7 +291,7 @@ class MovingViewsLayout @JvmOverloads constructor(
 
     override fun onRotation(rotationDetector: RotationGestureDetector) {
         if (selectedView != null) {
-            selectedView?.rotation = selectedView!!.getRotation() - rotationDetector.getAngle() // not replace kotlin
+            selectedView?.rotation = selectedView!!.getRotation() - rotationDetector.getAngle() // BUG NOT REPLACE KOTLIN PROP SYNTAX
         }
     }
 
@@ -404,7 +401,7 @@ class MovingViewsLayout @JvmOverloads constructor(
     override fun toString(): String {
         val out = StringBuilder(128)
         out.append(TAG)
-        out.append(" mSelectedChild: ")
+        out.append(" selectedChild: ")
         if (selectedView != null) {
             out.append(this.selectedView.toString())
         }
