@@ -11,5 +11,7 @@
 
     <!--BottomPanelView-->
     <color name="colorBtn">#4887D2</color>
+    <color name="colorImageBorder">#4887D2</color>
+    <color name="colorPlusBackground">#D4E2F5</color>
 
 </resources>

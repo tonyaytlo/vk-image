@@ -9,6 +9,7 @@ import android.widget.Button
 import com.tony.vkimage.R
 import com.tony.vkimage.data.entity.Background
 import ru.galt.app.extensions.bind
+import ru.galt.app.extensions.dpToPx
 
 class BottomPanelView @JvmOverloads constructor(
         context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
@@ -30,6 +31,7 @@ class BottomPanelView @JvmOverloads constructor(
         rvBackground.setHasFixedSize(true)
         rvBackground.itemAnimator = null // disable default animation
         rvBackground.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+        rvBackground.addItemDecoration(HorizontalOffsetDecoration(14.dpToPx))
     }
 
     fun showBackground(data: MutableList<Background>) {

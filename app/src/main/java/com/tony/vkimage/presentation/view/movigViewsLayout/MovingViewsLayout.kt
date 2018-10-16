@@ -86,7 +86,7 @@ class MovingViewsLayout @JvmOverloads constructor(
     }
 
     private fun doInitialLayout(l: Int, t: Int, r: Int, b: Int, count: Int) {
-        for (i in 0 until count) {
+        for (i in 0 until count) { //only center gravity
             val view = getChildAt(i)
             val mp = view.layoutParams as LayoutParams
             val width = view.measuredWidth
@@ -154,17 +154,19 @@ class MovingViewsLayout @JvmOverloads constructor(
     override fun onTouchEvent(event: MotionEvent): Boolean {
         rotationDetector.onTouchEvent(event)
         scaleDetector.onTouchEvent(event)
-        moveDetector(event)
-        return true
+        return moveDetector(event)
     }
 
-    private fun moveDetector(event: MotionEvent) {
+    private fun moveDetector(event: MotionEvent): Boolean {
         val x = event.x
         val y = event.y
 
         when (event.action and MotionEvent.ACTION_MASK) {
             MotionEvent.ACTION_DOWN -> {
                 prepareTouch(x, y)
+                if (selectedView == null) {
+                    return false
+                }
                 activePointerId = event.getPointerId(0)
             }
             MotionEvent.ACTION_POINTER_DOWN -> if (selectedView == null) {
@@ -224,6 +226,7 @@ class MovingViewsLayout @JvmOverloads constructor(
                 cancelSelect()
             }
         }
+        return true
     }
 
 //    override fun onInterceptTouchEvent(ev: MotionEvent): Boolean {

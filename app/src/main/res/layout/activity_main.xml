@@ -31,7 +31,7 @@
         android:id="@+id/flImage"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/bpPanel"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar">
@@ -42,14 +42,10 @@
             android:layout_height="match_parent"
             android:scaleType="fitXY" />
 
-        <com.tony.vkimage.presentation.view.movigViewsLayout.MovingViewsLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+        <com.tony.vkimage.presentation.view.movigViewsLayout.MovingViewsLayout
             android:id="@+id/rlContainer"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center">
-
-
-        </com.tony.vkimage.presentation.view.movigViewsLayout.MovingViewsLayout>
+            android:layout_height="match_parent" />
 
         <com.tony.vkimage.presentation.view.customEditText.CustomEditText
             android:id="@+id/etStoryText"
@@ -57,7 +53,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:hint="@string/et_story_hint"
-            android:inputType="textMultiLine"
+            android:inputType="textMultiLine|textVisiblePassword"
             android:paddingLeft="8dp"
             android:paddingRight="8dp"
             android:textSize="24sp"

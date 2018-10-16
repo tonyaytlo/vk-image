@@ -5,8 +5,10 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Path
+import android.graphics.drawable.Drawable
 import android.support.v7.widget.AppCompatEditText
 import android.util.AttributeSet
+import android.util.Log
 import android.view.View
 import com.tony.vkimage.extension.trimLine
 import ru.galt.app.extensions.dpToPx
@@ -38,14 +40,32 @@ class CustomEditText : AppCompatEditText {
             super(context, attrs, defStyleAttr)
 
     init {
-        //ET STYLING
-        setBackgroundResource(0)
+        //style
+        super.setBackgroundResource(0)
         textAlignment = View.TEXT_ALIGNMENT_CENTER
         //
         backgroundPaint.color = Color.WHITE
         backgroundPaint.alpha = 128
     }
 
+
+    fun setBackgroundAlpha(alpha: Int) {
+        backgroundPaint.alpha = alpha
+        invalidate()
+    }
+
+    override fun setBackgroundColor(color: Int) {
+        backgroundPaint.color = color
+        invalidate()
+    }
+
+    override fun setBackground(background: Drawable?) {
+        Log.e("CustomEditText", "view does not support background drawable")
+    }
+
+    override fun setBackgroundResource(resId: Int) {
+        Log.e("CustomEditText", "view does not support background resource")
+    }
 
     fun setStyle(styleBackground: Int) {
         selectedStyle = styleBackground

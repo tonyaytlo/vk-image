@@ -37,6 +37,7 @@ class MainActivity : AppCompatActivity(), StickerPickListener {
 
     private val REQUEST_PERMISSIONS = 121
     private val REQUEST_IMAGE = 122
+
     private val etStylesBackground = intArrayOf(
             CustomEditText.STYLE_ROUND_RECT_BACKGROUND,
             CustomEditText.STYLE_RECT_BACKGROUND,
@@ -44,6 +45,8 @@ class MainActivity : AppCompatActivity(), StickerPickListener {
     private var etStyleIndex = 0
 
     private var globalLayoutListener: ViewTreeObserver.OnGlobalLayoutListener? = null
+    private var keyboardVisible = false
+    private var isFirstOpen = true
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,17 +60,34 @@ class MainActivity : AppCompatActivity(), StickerPickListener {
 
     private fun setOnLayoutListener() {
         globalLayoutListener = ViewTreeObserver.OnGlobalLayoutListener {
-            val rootHeight = root.rootView.height
+            val rootHeight = root.rootView.height //screen height
             val keyboardHeight = rootHeight - root.height
-            if (keyboardHeight > 150) {
-                val possibleHeight = rootHeight - keyboardHeight - toolbar.height
-                flImage.layoutParams = flImage.layoutParams.apply {
-                    height = possibleHeight
+            val isKeyboardNowVisible = keyboardHeight > rootHeight * 0.15
+
+            if (keyboardVisible != isKeyboardNowVisible) {
+                if (isKeyboardNowVisible) {
+                    if (isFirstOpen) {
+                        setBackgroundSize(rootHeight - keyboardHeight)
+                        //На самом деле это не гарантирует то что размер изображения будет в итоге совпадать с минимальным свободным местом
+                        //так как высота клавитуры не константа
+                        //root.viewTreeObserver.removeOnGlobalLayoutListener(globalLayoutListener)// CHECK CASE (MIN HEIGHT)
+                    }
+                    etStoryText.isCursorVisible = true
+                } else {
+                    etStoryText.isCursorVisible = false
                 }
-                root.viewTreeObserver.removeOnGlobalLayoutListener(globalLayoutListener)// CHECK CASE (MIN HEIGHT)
             }
+            keyboardVisible = isKeyboardNowVisible
         }
         root.viewTreeObserver.addOnGlobalLayoutListener(globalLayoutListener)
+    }
+
+
+    private fun setBackgroundSize(posHeight: Int) {
+        val possibleHeight = posHeight - toolbar.height - bpPanel.height
+        flImage.layoutParams = flImage.layoutParams.apply {
+            height = possibleHeight
+        }
     }
 
     private fun setupToolbar() {
@@ -78,6 +98,17 @@ class MainActivity : AppCompatActivity(), StickerPickListener {
     }
 
     private fun setViewListeners() {
+        ivBackground.setOnTouchListener { view, motionEvent ->
+            if (motionEvent.action == MotionEvent.ACTION_DOWN) {
+                if (!keyboardVisible) {
+                    etStoryText.showKeyboard()
+                } else {
+                    hideKeyboard()
+                }
+            }
+            false
+        }
+        etStoryText.setOnClickListener { etStoryText.isCursorVisible = true }
         bpPanel.getSaveBtn().setOnClickListener { saveImage() }
         bpPanel.setOnAddClickListener { openGallery() }
         bpPanel.setOnItemClickListener {

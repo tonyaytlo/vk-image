@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import com.bumptech.glide.Glide
 import com.tony.vkimage.R
 import com.tony.vkimage.data.entity.Background
-import com.tony.vkimage.presentation.view.SelectableImageView
 import ru.galt.app.extensions.bind
 import ru.galt.app.extensions.getColorRes
 
@@ -44,6 +43,7 @@ class BackgroundsAdapter constructor(private val context: Context, var data: Mut
         }
     }
 
+
     inner class Holder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         private val siBackgrounds by bind<SelectableImageView>(R.id.siBackgrounds)
@@ -73,7 +73,7 @@ class BackgroundsAdapter constructor(private val context: Context, var data: Mut
 
         fun populatePlusItem() {
             siBackgrounds.setSelectedImage(false)
-            siBackgrounds.setColorFilter(context.getColorRes(R.color.colorPrimary), android.graphics.PorterDuff.Mode.SRC_IN)
+            siBackgrounds.setBackgroundColor(context.getColorRes(R.color.colorPlusBackground))
             Glide.with(this.itemView)
                     .load(R.drawable.ic_toolbar_new)
                     .into(siBackgrounds)
