@@ -1,5 +1,6 @@
 package com.tony.vkimage.presentation.activity
 
+import android.Manifest
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri
@@ -42,6 +43,7 @@ class MainActivity : AppCompatActivity(), StickerPickListener, ImageSaveListener
 
     private val REQUEST_PERMISSIONS = 121
     private val REQUEST_IMAGE = 122
+    private val REQUEST_IMAGE_SAVE = 123
 
     private val etStylesBackground = intArrayOf(
             CustomEditText.STYLE_ROUND_RECT_BACKGROUND,
@@ -123,10 +125,14 @@ class MainActivity : AppCompatActivity(), StickerPickListener, ImageSaveListener
 
 
     private fun saveImage() {
-        hideKeyboard()
-        etStoryText.isCursorVisible = false
-        val imageSaveTask = ImageSaveTask(this, ImageHelper.getBitmapFromView(flImage))
-        imageSaveTask.execute()
+        if (isPermissionsGranted(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+            hideKeyboard()
+            etStoryText.isCursorVisible = false
+            val imageSaveTask = ImageSaveTask(this, ImageHelper.getBitmapFromView(flImage))
+            imageSaveTask.execute()
+        } else {
+            askPermissions(arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), REQUEST_IMAGE_SAVE)
+        }
     }
 
     private fun showBackgrounds() {
