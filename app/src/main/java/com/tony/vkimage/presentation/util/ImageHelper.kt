@@ -18,7 +18,8 @@ import java.io.IOException
 class ImageHelper {
 
     companion object {
-        private val QUALITY_DEFAULT = 80
+
+        private const val QUALITY_DEFAULT = 80
 
         fun saveImageFromView(bitmap: Bitmap, quality: Int = QUALITY_DEFAULT): File? {
             val pictureFileDir = File(getExternalStoragePublicDirectory(DIRECTORY_PICTURES), VkApp.appContext().getString(R.string.app_name))
@@ -44,6 +45,8 @@ class ImageHelper {
             return pictureFile
         }
 
+
+        //Only in UI Thread or need block all action for view
         fun getBitmapFromView(view: View): Bitmap {
             val returnedBitmap = Bitmap.createBitmap(view.width, view.height, Bitmap.Config.ARGB_8888)
 

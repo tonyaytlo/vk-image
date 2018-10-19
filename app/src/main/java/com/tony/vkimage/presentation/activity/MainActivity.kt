@@ -116,9 +116,6 @@ class MainActivity : AppCompatActivity(), StickerPickListener, ImageSaveListener
                 if (!keyboardVisible) {
                     etStoryText.showKeyboard()
                 }
-//                else {
-//                    hideKeyboard()
-//                }
             }
             false
         }
