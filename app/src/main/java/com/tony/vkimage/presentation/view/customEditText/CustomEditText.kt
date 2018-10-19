@@ -6,6 +6,7 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.drawable.Drawable
+import android.os.Parcelable
 import android.support.v7.widget.AppCompatEditText
 import android.util.AttributeSet
 import android.util.Log
@@ -19,6 +20,8 @@ class CustomEditText : AppCompatEditText {
 
 
     companion object {
+        private const val TAG = "CustomEditText"
+
         const val STYLE_ROUND_RECT_BACKGROUND = 1
         const val STYLE_RECT_BACKGROUND = 2
         const val STYLE_TRANSPARENT_BACKGROUND = 3
@@ -45,7 +48,7 @@ class CustomEditText : AppCompatEditText {
         textAlignment = View.TEXT_ALIGNMENT_CENTER
         //
         backgroundPaint.color = Color.WHITE
-        backgroundPaint.alpha = 128
+        backgroundPaint.alpha = 180
     }
 
 
@@ -60,16 +63,18 @@ class CustomEditText : AppCompatEditText {
     }
 
     override fun setBackground(background: Drawable?) {
-        Log.e("CustomEditText", "view does not support background drawable")
+        Log.e(TAG, "view does not support background drawable")
     }
 
     override fun setBackgroundResource(resId: Int) {
-        Log.e("CustomEditText", "view does not support background resource")
+        Log.e(TAG, "view does not support background resource")
     }
 
     fun setStyle(styleBackground: Int) {
         selectedStyle = styleBackground
-        preparePath()
+        if (selectedStyle != STYLE_TRANSPARENT_BACKGROUND) {
+            preparePath()
+        }
         invalidate()
     }
 
@@ -247,5 +252,28 @@ class CustomEditText : AppCompatEditText {
                 path.lineTo(rightOrLeft, top - topCornerRadius)
             }
         }
+    }
+
+
+    override fun onSaveInstanceState(): Parcelable? {
+        val superState = super.onSaveInstanceState()
+        val ss = SavedState(superState)
+        ss.style = selectedStyle
+        return ss
+    }
+
+    override fun onRestoreInstanceState(state: Parcelable) {
+        if (state !is SavedState) {
+            super.onRestoreInstanceState(state)
+            return
+        }
+
+        val ss = state
+        super.onRestoreInstanceState(ss.superState)
+        selectedStyle = ss.style
+    }
+
+    private class SavedState(p: Parcelable) : View.BaseSavedState(p) {
+        internal var style: Int = STYLE_ROUND_RECT_BACKGROUND
     }
 }

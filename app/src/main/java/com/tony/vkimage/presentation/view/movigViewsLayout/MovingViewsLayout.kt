@@ -3,6 +3,7 @@ package com.tony.vkimage.presentation.view.movigViewsLayout
 import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.Color
+import android.graphics.Matrix
 import android.graphics.PointF
 import android.graphics.Rect
 import android.os.Parcelable
@@ -19,18 +20,23 @@ import com.tony.tinkoffnews.extension.makeVisible
 import com.tony.vkimage.presentation.view.movigViewsLayout.detectors.RotationGestureDetector
 import ru.galt.app.extensions.dpToPx
 
+
 class MovingViewsLayout @JvmOverloads constructor(
         context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : ViewGroup(context, attrs, defStyleAttr), RotationGestureDetector.OnRotationGestureListener,
         ScaleGestureDetector.OnScaleGestureListener {
 
+
+    companion object {
+        private const val TAG = "MovingViewsLayout"
+        private const val INVALID_POINTER_ID = -1
+    }
+
     private var trash: TrashFab? = null //TICK mb not-null
     private var selectedView: View? = null
 
-    private val TAG = "MovingViewsLayout"
     private val MIN_ZOOM = 1.0f
     private val MAX_ZOOM = 4.0f
-    private val INVALID_POINTER_ID = -1
 
 
     private var activePointerId = INVALID_POINTER_ID
@@ -155,11 +161,13 @@ class MovingViewsLayout @JvmOverloads constructor(
     }
 
     private fun moveDetector(event: MotionEvent): Boolean {
-        val x = event.x
-        val y = event.y
+
 
         when (event.action and MotionEvent.ACTION_MASK) {
             MotionEvent.ACTION_DOWN -> {
+                val x = event.x
+                val y = event.y
+
                 if (!prepareTouch(x, y)) {
                     return false
                 }
@@ -167,16 +175,16 @@ class MovingViewsLayout @JvmOverloads constructor(
             }
             MotionEvent.ACTION_POINTER_DOWN -> if (selectedView == null) {
                 val pointerIndex = event.actionIndex
-                val xx = event.getX(pointerIndex)
-                val yy = event.getY(pointerIndex)
+                val x = event.getX(pointerIndex)
+                val y = event.getY(pointerIndex)
 
-                if (prepareTouch(xx, yy)) {
+                if (prepareTouch(x, y)) {
                     activePointerId = event.getPointerId(pointerIndex)
                 }
             }
             MotionEvent.ACTION_MOVE -> if (selectedView != null && lastTouch != null) {
 
-                val lp = selectedView?.layoutParams as LayoutParams
+                val lp = selectedView!!.layoutParams as LayoutParams
 
                 val pointerIndex = event.findPointerIndex(activePointerId)
                 val curX = event.getX(pointerIndex)
@@ -214,7 +222,7 @@ class MovingViewsLayout @JvmOverloads constructor(
             }
             MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
                 activePointerId = INVALID_POINTER_ID
-                deleteViewIfNeed(x, y)
+                deleteViewIfNeed(event.x, event.y)
                 cancelSelect()
             }
             else -> {
@@ -291,7 +299,7 @@ class MovingViewsLayout @JvmOverloads constructor(
 
     override fun onRotation(rotationDetector: RotationGestureDetector) {
         if (selectedView != null) {
-            selectedView?.rotation = selectedView!!.getRotation() - rotationDetector.getAngle() // BUG NOT REPLACE KOTLIN PROP SYNTAX
+            selectedView!!.rotation = selectedView!!.getRotation() - rotationDetector.getAngle() // BUG NOT REPLACE KOTLIN PROP SYNTAX
         }
     }
 
@@ -316,16 +324,36 @@ class MovingViewsLayout @JvmOverloads constructor(
         return true
     }
 
-
     private fun findChildViewInsideTouch(x: Int, y: Int): View? {
         for (i in childCount - 1 downTo 0) {
             val view = getChildAt(i)
             if (view is TrashFab) {
                 continue
             }
+
             val rect = Rect()
             view.getHitRect(rect)
-            if (rect.contains(x, y)) {
+            val centerX = rect.centerX()
+            val centerY = rect.centerY()
+
+            val hitPosition = FloatArray(2)
+            hitPosition[0] = x.toFloat() - centerX
+            hitPosition[1] = y.toFloat() - centerY
+
+            val matrix = Matrix()
+            matrix.setRotate(view.rotation) // rotate
+            matrix.postScale(view.scaleX, view.scaleY) //scale
+
+            val inverse = Matrix()
+            matrix.invert(inverse)
+            inverse.mapPoints(hitPosition) // get invert x y
+
+            hitPosition[0] += centerX.toFloat()
+            hitPosition[1] += centerY.toFloat()
+            val newX = hitPosition[0]
+            val newY = hitPosition[1]
+
+            if (newX >= view.left && newX <= view.right && newY >= view.top && newY <= view.bottom) {
                 return view
             }
         }

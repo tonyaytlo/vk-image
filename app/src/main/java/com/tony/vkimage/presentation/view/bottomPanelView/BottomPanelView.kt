@@ -7,7 +7,7 @@ import android.support.v7.widget.RecyclerView
 import android.util.AttributeSet
 import android.widget.Button
 import com.tony.vkimage.R
-import com.tony.vkimage.data.entity.Background
+import com.tony.vkimage.data.entity.Background.Background
 import ru.galt.app.extensions.bind
 import ru.galt.app.extensions.dpToPx
 
@@ -36,6 +36,13 @@ class BottomPanelView @JvmOverloads constructor(
 
     fun showBackground(data: MutableList<Background>) {
         adapter = BackgroundsAdapter(context.applicationContext, data, onItemClick, onAddClick)
+        // set default selected
+        val background = data.firstOrNull()
+        if (background != null) {
+            adapter?.setSelected(background.id)
+            onItemClick?.invoke(background)
+        }
+        //
         rvBackground.adapter = adapter
     }
 

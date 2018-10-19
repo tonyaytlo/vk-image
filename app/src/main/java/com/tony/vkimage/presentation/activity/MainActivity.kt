@@ -10,22 +10,27 @@ import android.support.v7.widget.Toolbar
 import android.view.*
 import android.widget.ImageView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.RequestOptions
+import com.tony.tinkoffnews.extension.setVisibility
 import com.tony.tinkoffnews.extension.showToast
 import com.tony.vkimage.R
 import com.tony.vkimage.VkApp
 import com.tony.vkimage.data.entity.Sticker
 import com.tony.vkimage.extension.isImagePath
-import com.tony.vkimage.presentation.StickerPickListener
 import com.tony.vkimage.presentation.dialog.StickersBottomDialog
+import com.tony.vkimage.presentation.interfaces.ImageSaveListener
+import com.tony.vkimage.presentation.interfaces.StickerPickListener
+import com.tony.vkimage.presentation.task.ImageSaveTask
+import com.tony.vkimage.presentation.util.ImageHelper
 import com.tony.vkimage.presentation.view.bottomPanelView.BottomPanelView
 import com.tony.vkimage.presentation.view.customEditText.CustomEditText
 import com.tony.vkimage.presentation.view.movigViewsLayout.MovingViewsLayout
 import ru.galt.app.extensions.*
+import java.io.File
 
 
-class MainActivity : AppCompatActivity(), StickerPickListener {
-
+class MainActivity : AppCompatActivity(), StickerPickListener, ImageSaveListener {
 
     private val root by bind<ViewGroup>(R.id.root)
     private val toolbar by bind<Toolbar>(R.id.toolbar)
@@ -47,7 +52,6 @@ class MainActivity : AppCompatActivity(), StickerPickListener {
     private var globalLayoutListener: ViewTreeObserver.OnGlobalLayoutListener? = null
     private var keyboardVisible = false
     private var isFirstOpen = true
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -98,32 +102,33 @@ class MainActivity : AppCompatActivity(), StickerPickListener {
     }
 
     private fun setViewListeners() {
-        ivBackground.setOnTouchListener { view, motionEvent ->
-            if (motionEvent.action == MotionEvent.ACTION_DOWN) {
-                if (!keyboardVisible) {
-                    etStoryText.showKeyboard()
-                } else {
-                    hideKeyboard()
-                }
-            }
-            false
-        }
         etStoryText.setOnClickListener { etStoryText.isCursorVisible = true }
         bpPanel.getSaveBtn().setOnClickListener { saveImage() }
         bpPanel.setOnAddClickListener { openGallery() }
         bpPanel.setOnItemClickListener {
             Glide.with(this)
-                    .load(it.drawableId)
+                    .load(it.getDrawable())
+                    .transition(DrawableTransitionOptions.withCrossFade(400))
                     .into(ivBackground)
+        }
+        ivBackground.setOnTouchListener { view, motionEvent ->
+            if (motionEvent.action == MotionEvent.ACTION_DOWN) {
+                if (!keyboardVisible) {
+                    etStoryText.showKeyboard()
+                }
+//                else {
+//                    hideKeyboard()
+//                }
+            }
+            false
         }
     }
 
+
     private fun saveImage() {
-        if (VkApp.imageHelper.saveImageFromView(this, flImage) != null) {
-            showToast(getString(R.string.image_saved))
-        } else {
-            showToast(getString(R.string.error_image_save))
-        }
+        etStoryText.isCursorVisible = false
+        val imageSaveTask = ImageSaveTask(this, ImageHelper.getBitmapFromView(flImage))
+        imageSaveTask.execute()
     }
 
     private fun showBackgrounds() {
@@ -138,6 +143,11 @@ class MainActivity : AppCompatActivity(), StickerPickListener {
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
         R.id.action_stickers -> {
             openStickersDialog()
+            true
+        }
+
+        R.id.action_text_visibility -> {
+            toggleTextVisibility()
             true
         }
 
@@ -168,6 +178,13 @@ class MainActivity : AppCompatActivity(), StickerPickListener {
         etStoryText.setStyle(etStylesBackground[etStyleIndex])
     }
 
+    private fun toggleTextVisibility() {
+        etStoryText.setVisibility(etStoryText.visibility != View.VISIBLE)
+        if (etStoryText.visibility == View.GONE) {
+            hideKeyboard()
+        }
+    }
+
     override fun onStickerPicked(sticker: Sticker) {
         addSticker(sticker)
     }
@@ -180,6 +197,14 @@ class MainActivity : AppCompatActivity(), StickerPickListener {
         Glide.with(this)
                 .load(Uri.parse(sticker.imgPath))
                 .into(ivSticker)
+    }
+
+    override fun onSuccessSave(file: File) {
+        showToast(getString(R.string.image_saved))
+    }
+
+    override fun onErrorSave() {
+        showToast(getString(R.string.error_image_save))
     }
 
     private fun openGallery() {
@@ -208,12 +233,10 @@ class MainActivity : AppCompatActivity(), StickerPickListener {
         }
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == REQUEST_PERMISSIONS) {
-            if (grantResults.isPermissionsGranted()) {
-                openGallery()
-            }
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, results: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, results)
+        if (requestCode == REQUEST_PERMISSIONS && results.isPermissionsGranted()) {
+            openGallery()
         }
     }
 

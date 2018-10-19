@@ -3,6 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/action_text_visibility"
+        android:icon="@drawable/ic_toolbar_visibility_off"
+        android:title="@string/text_visibility"
+        app:showAsAction="always" />
+
+    <item
         android:id="@+id/action_stickers"
         android:icon="@drawable/ic_toolbar_sticker"
         android:title="@string/stickers"

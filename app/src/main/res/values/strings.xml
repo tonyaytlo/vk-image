@@ -3,9 +3,11 @@
 
     <string name="title">Новая запись</string>
     <string name="stickers">Стикеры</string>
+    <string name="text_visibility">Видимость текста</string>
     <string name="et_story_hint">Что у Вас нового?</string>
     <string name="btn_save">Сохранить</string>
     <string name="error_image_type">Неизвестный тип изображения</string>
     <string name="image_saved">Изображение сохранено</string>
     <string name="error_image_save">Ошибка сохраненения изображения</string>
+    <string name="error_save_image">Ошибка сохранения изображения</string>
 </resources>
