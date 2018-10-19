@@ -123,6 +123,7 @@ class MainActivity : AppCompatActivity(), StickerPickListener, ImageSaveListener
 
 
     private fun saveImage() {
+        hideKeyboard()
         etStoryText.isCursorVisible = false
         val imageSaveTask = ImageSaveTask(this, ImageHelper.getBitmapFromView(flImage))
         imageSaveTask.execute()
