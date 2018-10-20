@@ -51,7 +51,7 @@ class BackgroundsAdapter constructor(private val context: Context, var data: Mut
         if (selectedItemIndex != RecyclerView.NO_POSITION) {
             notifyItemChanged(selectedItemIndex)
             selectedId = -1
-            selectedItemIndex - 1
+            selectedItemIndex = RecyclerView.NO_POSITION
         }
     }
 
