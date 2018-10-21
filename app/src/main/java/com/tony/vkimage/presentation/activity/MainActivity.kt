@@ -112,7 +112,6 @@ class MainActivity : AppCompatActivity(), StickerPickListener, ImageSaveListener
         bpPanel.setOnItemClickListener {
             Glide.with(this)
                     .load(it.getDrawable())
-                    .apply(requestOptions)
                     .transition(DrawableTransitionOptions.withCrossFade(400))
                     .into(ivBackground)
         }
