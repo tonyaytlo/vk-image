@@ -1,6 +1,7 @@
 package com.tony.vkimage.presentation.activity
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri
@@ -54,6 +55,7 @@ class MainActivity : AppCompatActivity(), StickerPickListener, ImageSaveListener
     private var globalLayoutListener: ViewTreeObserver.OnGlobalLayoutListener? = null
     private var keyboardVisible = false
     private var isFirstOpen = true
+    private val requestOptions = RequestOptions().override(700, 500)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -110,10 +112,11 @@ class MainActivity : AppCompatActivity(), StickerPickListener, ImageSaveListener
         bpPanel.setOnItemClickListener {
             Glide.with(this)
                     .load(it.getDrawable())
+                    .apply(requestOptions)
                     .transition(DrawableTransitionOptions.withCrossFade(400))
                     .into(ivBackground)
         }
-        ivBackground.setOnTouchListener { view, motionEvent ->
+        ivBackground.setOnTouchListener { _, motionEvent ->
             if (motionEvent.action == MotionEvent.ACTION_DOWN) {
                 if (!keyboardVisible) {
                     etStoryText.showKeyboard()
@@ -227,7 +230,7 @@ class MainActivity : AppCompatActivity(), StickerPickListener, ImageSaveListener
                         bpPanel.unselectBackground()
                         Glide.with(this)
                                 .load(path)
-                                .apply(RequestOptions().centerCrop())
+                                .apply(requestOptions.centerCrop())
                                 .into(ivBackground)
                     } else {
                         showToast(getString(R.string.error_image_type))
