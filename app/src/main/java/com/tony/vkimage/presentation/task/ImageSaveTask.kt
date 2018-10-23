@@ -23,5 +23,4 @@ class ImageSaveTask constructor(listener: ImageSaveListener, private val bitmap:
             weakListener.get()?.onErrorSave()
         }
     }
-
 }

@@ -7,7 +7,7 @@ import android.support.v7.widget.RecyclerView
 import android.util.AttributeSet
 import android.widget.Button
 import com.tony.vkimage.R
-import com.tony.vkimage.data.entity.Background.Background
+import com.tony.vkimage.data.entity.BackgroundDrawable
 import ru.galt.app.extensions.bind
 import ru.galt.app.extensions.dpToPx
 
@@ -19,7 +19,7 @@ class BottomPanelView @JvmOverloads constructor(
     private val btnSave by bind<Button>(R.id.btnSave)
     private var adapter: BackgroundsAdapter? = null
 
-    private var onItemClick: ((Background) -> Unit)? = null
+    private var onItemClick: ((BackgroundDrawable) -> Unit)? = null
     private var onAddClick: (() -> Unit)? = null
 
     init {
@@ -34,7 +34,7 @@ class BottomPanelView @JvmOverloads constructor(
         rvBackground.addItemDecoration(HorizontalOffsetDecoration(14.dpToPx))
     }
 
-    fun showBackground(data: MutableList<Background>) {
+    fun showBackground(data: MutableList<BackgroundDrawable>) {
         adapter = BackgroundsAdapter(context.applicationContext, data, onItemClick, onAddClick)
         // set default selected
         val background = data.firstOrNull()
@@ -42,13 +42,13 @@ class BottomPanelView @JvmOverloads constructor(
             adapter?.setSelected(background.id)
             onItemClick?.invoke(background)
         }
-        //
+
         rvBackground.adapter = adapter
     }
 
     fun getSaveBtn() = btnSave
 
-    fun setOnItemClickListener(onItemClick: ((Background) -> Unit)? = null) {
+    fun setOnItemClickListener(onItemClick: ((BackgroundDrawable) -> Unit)? = null) {
         this.onItemClick = onItemClick
     }
 

@@ -19,6 +19,7 @@ class StickersBottomDialog : BottomSheetDialogFragment() {
 
     companion object {
         const val TAG = "StickersBottomDialog"
+
         private const val SPAN_COUNT = 4
     }
 
@@ -50,16 +51,14 @@ class StickersBottomDialog : BottomSheetDialogFragment() {
     }
 
     private fun showStickers(stickers: MutableList<Sticker>) {
-        val adapter = StickerAdapter(activity!!.applicationContext, stickers,
-                { sticker ->
-                    stickerPickListener?.onStickerPicked(sticker)
-                    dismiss()
-                })
+        val adapter = StickerAdapter(activity!!.applicationContext, stickers) { sticker ->
+            stickerPickListener?.onStickerPicked(sticker)
+            dismiss()
+        }
         rvStickers.setHasFixedSize(true)
         rvStickers.layoutManager = GridLayoutManager(activity, SPAN_COUNT)
         rvStickers.adapter = adapter
     }
-
 
     override fun onDestroy() {
         super.onDestroy()

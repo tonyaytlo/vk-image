@@ -1,8 +1,8 @@
-package com.tony.vkimage.data.entity.Background
+package com.tony.vkimage.data.entity
 
 import android.graphics.drawable.Drawable
 
-abstract class Background constructor(val id: Int = id_) {
+abstract class BackgroundDrawable constructor(val id: Int = id_) {
 
     companion object {
         private var id_ = 0

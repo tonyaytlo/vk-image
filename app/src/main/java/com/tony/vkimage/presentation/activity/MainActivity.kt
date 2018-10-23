@@ -1,7 +1,6 @@
 package com.tony.vkimage.presentation.activity
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri
@@ -14,7 +13,9 @@ import android.widget.ImageView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.RequestOptions
+import com.tony.tinkoffnews.extension.hideCursor
 import com.tony.tinkoffnews.extension.setVisibility
+import com.tony.tinkoffnews.extension.showCursor
 import com.tony.tinkoffnews.extension.showToast
 import com.tony.vkimage.R
 import com.tony.vkimage.VkApp
@@ -38,13 +39,13 @@ class MainActivity : AppCompatActivity(), StickerPickListener, ImageSaveListener
     private val toolbar by bind<Toolbar>(R.id.toolbar)
     private val flImage by bind<View>(R.id.flImage)
     private val ivBackground by bind<ImageView>(R.id.ivBackground)
-    private val rlContainer by bind<MovingViewsLayout>(R.id.rlContainer)
+    private val mvMovingContainer by bind<MovingViewsLayout>(R.id.rlContainer)
     private val etStoryText by bind<CustomEditText>(R.id.etStoryText)
     private val bpPanel by bind<BottomPanelView>(R.id.bpPanel)
 
-    private val REQUEST_PERMISSIONS = 121
-    private val REQUEST_IMAGE = 122
-    private val REQUEST_IMAGE_SAVE = 123
+    private val REQUEST_PERMISSIONS_GALLERY = 1
+    private val REQUEST_IMAGE = 2
+    private val REQUEST_IMAGE_SAVE = 3
 
     private val etStylesBackground = intArrayOf(
             CustomEditText.STYLE_ROUND_RECT_BACKGROUND,
@@ -80,9 +81,9 @@ class MainActivity : AppCompatActivity(), StickerPickListener, ImageSaveListener
                         //так как высота клавитуры не константа
                         //root.viewTreeObserver.removeOnGlobalLayoutListener(globalLayoutListener)// CHECK CASE (MIN HEIGHT)
                     }
-                    etStoryText.isCursorVisible = true
+                    etStoryText.showCursor()
                 } else {
-                    etStoryText.isCursorVisible = false
+                    etStoryText.hideCursor()
                 }
             }
             keyboardVisible = isKeyboardNowVisible
@@ -106,7 +107,7 @@ class MainActivity : AppCompatActivity(), StickerPickListener, ImageSaveListener
     }
 
     private fun setViewListeners() {
-        etStoryText.setOnClickListener { etStoryText.isCursorVisible = true }
+        etStoryText.setOnClickListener { etStoryText.showCursor() }
         bpPanel.getSaveBtn().setOnClickListener { saveImage() }
         bpPanel.setOnAddClickListener { openGallery() }
         bpPanel.setOnItemClickListener {
@@ -129,7 +130,7 @@ class MainActivity : AppCompatActivity(), StickerPickListener, ImageSaveListener
     private fun saveImage() {
         if (isPermissionsGranted(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
             hideKeyboard()
-            etStoryText.isCursorVisible = false
+            etStoryText.hideCursor()
             val imageSaveTask = ImageSaveTask(this, ImageHelper.getBitmapFromView(flImage))
             imageSaveTask.execute()
         } else {
@@ -170,9 +171,8 @@ class MainActivity : AppCompatActivity(), StickerPickListener, ImageSaveListener
 
     private fun openStickersDialog() {
         hideKeyboard()
-        val bottomSheetFragment = StickersBottomDialog()
         if (supportFragmentManager.findFragmentByTag(StickersBottomDialog.TAG) == null) {
-            bottomSheetFragment.show(supportFragmentManager, StickersBottomDialog.TAG)
+            StickersBottomDialog().show(supportFragmentManager, StickersBottomDialog.TAG)
         }
     }
 
@@ -199,7 +199,7 @@ class MainActivity : AppCompatActivity(), StickerPickListener, ImageSaveListener
         val ivSticker = ImageView(this)
         ivSticker.layoutParams = MovingViewsLayout.LayoutParams(ViewGroup.LayoutParams(120.dpToPx, 120.dpToPx))
         ivSticker.id = View.generateViewId()
-        rlContainer.addView(ivSticker)
+        mvMovingContainer.addView(ivSticker)
         Glide.with(this)
                 .load(Uri.parse(sticker.imgPath))
                 .into(ivSticker)
@@ -215,7 +215,7 @@ class MainActivity : AppCompatActivity(), StickerPickListener, ImageSaveListener
 
     private fun openGallery() {
         hideKeyboard()
-        openGalleryIntent(REQUEST_IMAGE, REQUEST_PERMISSIONS)
+        openGalleryIntent(REQUEST_IMAGE, REQUEST_PERMISSIONS_GALLERY)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -241,7 +241,7 @@ class MainActivity : AppCompatActivity(), StickerPickListener, ImageSaveListener
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, results: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, results)
-        if (requestCode == REQUEST_PERMISSIONS && results.isPermissionsGranted()) {
+        if (requestCode == REQUEST_PERMISSIONS_GALLERY && results.isPermissionsGranted()) {
             openGallery()
         }
     }

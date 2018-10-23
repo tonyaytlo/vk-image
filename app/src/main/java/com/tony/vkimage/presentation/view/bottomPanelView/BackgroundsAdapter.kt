@@ -7,12 +7,13 @@ import android.view.View
 import android.view.ViewGroup
 import com.bumptech.glide.Glide
 import com.tony.vkimage.R
-import com.tony.vkimage.data.entity.Background.Background
+import com.tony.vkimage.data.entity.BackgroundDrawable
 import ru.galt.app.extensions.bind
 import ru.galt.app.extensions.getColorRes
 
-class BackgroundsAdapter constructor(private val context: Context, var data: MutableList<Background>,
-                                     var onItemClick: ((Background) -> Unit)? = null,
+class BackgroundsAdapter constructor(private val context: Context,
+                                     var data: MutableList<BackgroundDrawable>,
+                                     var onItemClick: ((BackgroundDrawable) -> Unit)? = null,
                                      var onAddClick: (() -> Unit)? = null)
     : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -21,9 +22,11 @@ class BackgroundsAdapter constructor(private val context: Context, var data: Mut
         private const val VIEW_TYPE_PLUS = 2
     }
 
-    private val FOOTER_ITEM_PLUS = 1
     private val inflater
             by lazy { context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater }
+
+    private val FOOTER_ITEM_PLUS = 1
+
     private var selectedId: Int = -1
     private var selectedItemIndex: Int = RecyclerView.NO_POSITION
 
@@ -33,11 +36,11 @@ class BackgroundsAdapter constructor(private val context: Context, var data: Mut
             else
                 PlusHolder(inflater.inflate(R.layout.item_background, parent, false))
 
-    override fun getItemViewType(position: Int): Int {
-        return if (position != itemCount - 1) VIEW_TYPE_ITEM else VIEW_TYPE_PLUS
-    }
+    override fun getItemViewType(position: Int) =
+            if (position != itemCount - 1) VIEW_TYPE_ITEM else VIEW_TYPE_PLUS
 
-    override fun getItemCount() = data.size + FOOTER_ITEM_PLUS
+    override fun getItemCount() =
+            data.size + FOOTER_ITEM_PLUS
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is ItemHolder) {
@@ -50,6 +53,7 @@ class BackgroundsAdapter constructor(private val context: Context, var data: Mut
     fun onUnselect() {
         if (selectedItemIndex != RecyclerView.NO_POSITION) {
             notifyItemChanged(selectedItemIndex)
+
             selectedId = -1
             selectedItemIndex = RecyclerView.NO_POSITION
         }
@@ -82,14 +86,15 @@ class BackgroundsAdapter constructor(private val context: Context, var data: Mut
                 selectedId = background.id
                 notifyItemChanged(selectedItemIndex)
                 selectedItemIndex = adapterPosition
+
                 onItemClick?.invoke(background)
             }
         }
 
-        fun populateItem(background: Background) {
-            siBackgrounds.setSelectedImage(selectedId == background.id)
+        fun populateItem(backgroundDrawable: BackgroundDrawable) {
+            siBackgrounds.setSelectedImage(selectedId == backgroundDrawable.id)
             Glide.with(this.itemView)
-                    .load(background.getThumbnailDrawable())
+                    .load(backgroundDrawable.getThumbnailDrawable())
                     .into(siBackgrounds)
         }
     }
