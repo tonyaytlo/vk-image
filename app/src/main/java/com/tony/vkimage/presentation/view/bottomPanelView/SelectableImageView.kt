@@ -5,8 +5,8 @@ import android.graphics.*
 import android.util.AttributeSet
 import android.widget.ImageView
 import com.tony.vkimage.R
-import ru.galt.app.extensions.dpToPx
-import ru.galt.app.extensions.getColorRes
+import com.tony.vkimage.extension.dpToPx
+import com.tony.vkimage.extension.getColorRes
 
 //may optimize
 // fix round -> background drawable, background

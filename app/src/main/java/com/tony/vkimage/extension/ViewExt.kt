@@ -1,4 +1,4 @@
-package com.tony.tinkoffnews.extension
+package com.tony.vkimage.extension
 
 import android.content.Context
 import android.view.View

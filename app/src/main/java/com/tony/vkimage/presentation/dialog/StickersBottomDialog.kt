@@ -7,12 +7,12 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.tony.tinkoffnews.presentation.view.adapter.StickerAdapter
+import com.tony.vkimage.presentation.adapter.StickerAdapter
 import com.tony.vkimage.R
 import com.tony.vkimage.VkApp
 import com.tony.vkimage.data.entity.Sticker
 import com.tony.vkimage.presentation.interfaces.StickerPickListener
-import ru.galt.app.extensions.bind
+import com.tony.vkimage.extension.bind
 
 
 class StickersBottomDialog : BottomSheetDialogFragment() {

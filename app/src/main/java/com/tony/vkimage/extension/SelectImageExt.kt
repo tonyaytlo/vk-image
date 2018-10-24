@@ -1,4 +1,4 @@
-package ru.galt.app.extensions
+package com.tony.vkimage.extension
 
 import android.Manifest
 import android.annotation.SuppressLint

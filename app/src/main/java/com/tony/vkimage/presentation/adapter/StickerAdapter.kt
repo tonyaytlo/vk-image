@@ -1,4 +1,4 @@
-package com.tony.tinkoffnews.presentation.view.adapter
+package com.tony.vkimage.presentation.adapter
 
 import android.content.Context
 import android.net.Uri
@@ -10,7 +10,7 @@ import android.widget.ImageView
 import com.bumptech.glide.Glide
 import com.tony.vkimage.R
 import com.tony.vkimage.data.entity.Sticker
-import ru.galt.app.extensions.bind
+import com.tony.vkimage.extension.bind
 
 
 class StickerAdapter constructor(private val context: Context, var data: MutableList<Sticker>,

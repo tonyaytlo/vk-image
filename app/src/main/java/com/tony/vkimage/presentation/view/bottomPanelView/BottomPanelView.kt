@@ -8,8 +8,8 @@ import android.util.AttributeSet
 import android.widget.Button
 import com.tony.vkimage.R
 import com.tony.vkimage.data.entity.BackgroundDrawable
-import ru.galt.app.extensions.bind
-import ru.galt.app.extensions.dpToPx
+import com.tony.vkimage.extension.bind
+import com.tony.vkimage.extension.dpToPx
 
 class BottomPanelView @JvmOverloads constructor(
         context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0

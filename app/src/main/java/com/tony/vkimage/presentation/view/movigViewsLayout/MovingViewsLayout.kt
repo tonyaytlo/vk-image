@@ -15,10 +15,10 @@ import android.view.ScaleGestureDetector
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams
-import com.tony.tinkoffnews.extension.makeInvisible
-import com.tony.tinkoffnews.extension.makeVisible
+import com.tony.vkimage.extension.makeInvisible
+import com.tony.vkimage.extension.makeVisible
 import com.tony.vkimage.presentation.view.movigViewsLayout.detectors.RotationGestureDetector
-import ru.galt.app.extensions.dpToPx
+import com.tony.vkimage.extension.dpToPx
 
 
 class MovingViewsLayout @JvmOverloads constructor(

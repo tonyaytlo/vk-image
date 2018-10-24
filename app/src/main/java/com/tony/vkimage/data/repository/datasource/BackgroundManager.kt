@@ -6,7 +6,6 @@ import com.tony.vkimage.data.entity.BackgroundDrawable
 import com.tony.vkimage.data.entity.BackgroundColor
 import com.tony.vkimage.data.entity.BackgroundRes
 
-
 class BackgroundManager {
 
     fun getBackgrounds(context: Context): MutableList<BackgroundDrawable> {

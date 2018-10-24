@@ -8,8 +8,8 @@ import android.view.ViewGroup
 import com.bumptech.glide.Glide
 import com.tony.vkimage.R
 import com.tony.vkimage.data.entity.BackgroundDrawable
-import ru.galt.app.extensions.bind
-import ru.galt.app.extensions.getColorRes
+import com.tony.vkimage.extension.bind
+import com.tony.vkimage.extension.getColorRes
 
 class BackgroundsAdapter constructor(private val context: Context,
                                      var data: MutableList<BackgroundDrawable>,

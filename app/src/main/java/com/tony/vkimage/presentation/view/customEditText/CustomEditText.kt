@@ -12,9 +12,8 @@ import android.util.AttributeSet
 import android.util.Log
 import android.view.View
 import com.tony.vkimage.extension.trimLine
-import ru.galt.app.extensions.dpToPx
+import com.tony.vkimage.extension.dpToPx
 import kotlin.math.absoluteValue
-
 
 class CustomEditText : AppCompatEditText {
 

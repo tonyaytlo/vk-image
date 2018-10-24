@@ -1,4 +1,4 @@
-package ru.galt.app.extensions
+package com.tony.vkimage.extension
 
 import android.content.Context
 import android.content.pm.PackageManager

@@ -13,14 +13,10 @@ import android.widget.ImageView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.RequestOptions
-import com.tony.tinkoffnews.extension.hideCursor
-import com.tony.tinkoffnews.extension.setVisibility
-import com.tony.tinkoffnews.extension.showCursor
-import com.tony.tinkoffnews.extension.showToast
 import com.tony.vkimage.R
 import com.tony.vkimage.VkApp
 import com.tony.vkimage.data.entity.Sticker
-import com.tony.vkimage.extension.isImagePath
+import com.tony.vkimage.extension.*
 import com.tony.vkimage.presentation.dialog.StickersBottomDialog
 import com.tony.vkimage.presentation.interfaces.ImageSaveListener
 import com.tony.vkimage.presentation.interfaces.StickerPickListener
@@ -29,7 +25,6 @@ import com.tony.vkimage.presentation.util.ImageHelper
 import com.tony.vkimage.presentation.view.bottomPanelView.BottomPanelView
 import com.tony.vkimage.presentation.view.customEditText.CustomEditText
 import com.tony.vkimage.presentation.view.movigViewsLayout.MovingViewsLayout
-import ru.galt.app.extensions.*
 import java.io.File
 
 
