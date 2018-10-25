@@ -86,19 +86,18 @@ class MainActivity : AppCompatActivity(), StickerPickListener, ImageSaveListener
         root.viewTreeObserver.addOnGlobalLayoutListener(globalLayoutListener)
     }
 
+    private fun setupToolbar() {
+        val drawable = ContextCompat.getDrawable(this, R.drawable.ic_toolbar_font)
+        toolbar.navigationIcon = drawable
+        toolbar.title = ""
+        setSupportActionBar(toolbar)
+    }
 
     private fun setBackgroundSize(posHeight: Int) {
         val possibleHeight = posHeight - toolbar.height - bpPanel.height
         flImage.layoutParams = flImage.layoutParams.apply {
             height = possibleHeight
         }
-    }
-
-    private fun setupToolbar() {
-        val drawable = ContextCompat.getDrawable(this, R.drawable.ic_toolbar_font)
-        toolbar.navigationIcon = drawable
-        toolbar.title = ""
-        setSupportActionBar(toolbar)
     }
 
     private fun setViewListeners() {
@@ -172,11 +171,8 @@ class MainActivity : AppCompatActivity(), StickerPickListener, ImageSaveListener
     }
 
     private fun changeFontStyle() {
-        etStyleIndex++
-        if (etStyleIndex >= etStylesBackground.size) {
-            etStyleIndex = 0
-        }
-        etStoryText.setStyle(etStylesBackground[etStyleIndex])
+        etStyleIndex = (etStyleIndex + 1) % etStylesBackground.size
+        etStoryText.setBackgroundStyle(etStylesBackground[etStyleIndex])
     }
 
     private fun toggleTextVisibility() {
@@ -192,7 +188,8 @@ class MainActivity : AppCompatActivity(), StickerPickListener, ImageSaveListener
 
     private fun addSticker(sticker: Sticker) {
         val ivSticker = ImageView(this)
-        ivSticker.layoutParams = MovingViewsLayout.LayoutParams(ViewGroup.LayoutParams(120.dpToPx, 120.dpToPx))
+        ivSticker.layoutParams =
+                MovingViewsLayout.LayoutParams(ViewGroup.LayoutParams(120.dpToPx, 120.dpToPx))
         ivSticker.id = View.generateViewId()
         mvMovingContainer.addView(ivSticker)
         Glide.with(this)

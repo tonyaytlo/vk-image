@@ -13,5 +13,4 @@
         android:icon="@drawable/ic_toolbar_sticker"
         android:title="@string/stickers"
         app:showAsAction="always" />
-
 </menu>

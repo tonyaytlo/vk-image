@@ -42,7 +42,13 @@ class StickersBottomDialog : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initRecycler()
         getStickers()
+    }
+
+    private fun initRecycler() {
+        rvStickers.setHasFixedSize(true)
+        rvStickers.layoutManager = GridLayoutManager(activity, SPAN_COUNT)
     }
 
     private fun getStickers() {
@@ -55,8 +61,6 @@ class StickersBottomDialog : BottomSheetDialogFragment() {
             stickerPickListener?.onStickerPicked(sticker)
             dismiss()
         }
-        rvStickers.setHasFixedSize(true)
-        rvStickers.layoutManager = GridLayoutManager(activity, SPAN_COUNT)
         rvStickers.adapter = adapter
     }
 
