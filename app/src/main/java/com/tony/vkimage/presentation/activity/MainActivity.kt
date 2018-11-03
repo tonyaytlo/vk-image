@@ -23,7 +23,7 @@ import com.tony.vkimage.presentation.interfaces.StickerPickListener
 import com.tony.vkimage.presentation.task.ImageSaveTask
 import com.tony.vkimage.presentation.util.ImageHelper
 import com.tony.vkimage.presentation.view.bottomPanelView.BottomPanelView
-import com.tony.vkimage.presentation.view.customEditText.BackgroundEditText
+import com.tony.vkimage.presentation.view.backgroundEditText.BackgroundEditText
 import com.tony.vkimage.presentation.view.movigViewsLayout.MovingViewsLayout
 import java.io.File
 

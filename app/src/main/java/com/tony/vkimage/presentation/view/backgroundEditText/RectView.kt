@@ -1,4 +1,4 @@
-package com.tony.vkimage.presentation.view.customEditText
+package com.tony.vkimage.presentation.view.backgroundEditText
 
 import android.os.Parcel
 import android.os.Parcelable

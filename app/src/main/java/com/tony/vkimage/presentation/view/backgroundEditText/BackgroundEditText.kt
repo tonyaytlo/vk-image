@@ -1,4 +1,4 @@
-package com.tony.vkimage.presentation.view.customEditText
+package com.tony.vkimage.presentation.view.backgroundEditText
 
 import android.content.Context
 import android.graphics.*
@@ -11,8 +11,6 @@ import android.view.View
 import com.tony.vkimage.R
 import com.tony.vkimage.extension.dpToPx
 import com.tony.vkimage.extension.trimLine
-import java.util.regex.Matcher
-import java.util.regex.Pattern
 import kotlin.math.absoluteValue
 
 class BackgroundEditText : AppCompatEditText {
@@ -100,6 +98,8 @@ class BackgroundEditText : AppCompatEditText {
         bPaint.alpha = bAlpha
         invalidate()
     }
+
+    fun getBackgroundAlpha() = bAlpha
 
     override fun setBackgroundColor(color: Int) {
         if (color == bColor) {
