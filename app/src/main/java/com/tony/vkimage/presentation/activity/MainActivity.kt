@@ -23,7 +23,7 @@ import com.tony.vkimage.presentation.interfaces.StickerPickListener
 import com.tony.vkimage.presentation.task.ImageSaveTask
 import com.tony.vkimage.presentation.util.ImageHelper
 import com.tony.vkimage.presentation.view.bottomPanelView.BottomPanelView
-import com.tony.vkimage.presentation.view.customEditText.CustomEditText
+import com.tony.vkimage.presentation.view.customEditText.BackgroundEditText
 import com.tony.vkimage.presentation.view.movigViewsLayout.MovingViewsLayout
 import java.io.File
 
@@ -35,7 +35,7 @@ class MainActivity : AppCompatActivity(), StickerPickListener, ImageSaveListener
     private val flImage by bind<View>(R.id.flImage)
     private val ivBackground by bind<ImageView>(R.id.ivBackground)
     private val mvMovingContainer by bind<MovingViewsLayout>(R.id.rlContainer)
-    private val etStoryText by bind<CustomEditText>(R.id.etStoryText)
+    private val etStoryText by bind<BackgroundEditText>(R.id.etStoryText)
     private val bpPanel by bind<BottomPanelView>(R.id.bpPanel)
 
     private val REQUEST_PERMISSIONS_GALLERY = 1
@@ -43,9 +43,9 @@ class MainActivity : AppCompatActivity(), StickerPickListener, ImageSaveListener
     private val REQUEST_IMAGE_SAVE = 3
 
     private val etStylesBackground = intArrayOf(
-            CustomEditText.STYLE_ROUND_RECT_BACKGROUND,
-            CustomEditText.STYLE_RECT_BACKGROUND,
-            CustomEditText.STYLE_TRANSPARENT_BACKGROUND)
+            BackgroundEditText.STYLE_ROUND_RECT_BACKGROUND,
+            BackgroundEditText.STYLE_RECT_BACKGROUND,
+            BackgroundEditText.STYLE_TRANSPARENT_BACKGROUND)
     private var etStyleIndex = 0
 
     private var globalLayoutListener: ViewTreeObserver.OnGlobalLayoutListener? = null

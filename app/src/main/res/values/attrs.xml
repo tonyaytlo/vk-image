@@ -3,4 +3,11 @@
     <declare-styleable name="SquareConstraintLayout">
         <attr name="horizontal" format="boolean" />
     </declare-styleable>
+
+    <declare-styleable name="BackgroundEditText">
+        <attr name="bColor" format="color" />
+        <attr name="bAlpha" format="integer" />
+        <attr name="bSmoothing" format="dimension" />
+        <attr name="bCornerRadius" format="dimension" />
+    </declare-styleable>
 </resources>
