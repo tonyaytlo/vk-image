@@ -18,17 +18,20 @@ class BackgroundsAdapter constructor(private val context: Context,
     : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     companion object {
+        private const val NO_ID = -1
+
         private const val VIEW_TYPE_ITEM = 1
         private const val VIEW_TYPE_PLUS = 2
+
+        private const val PAYLOAD_SELECTION = "selection"
     }
 
     private val inflater
             by lazy { context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater }
 
-    private val FOOTER_ITEM_PLUS = 1
+    private val ITEM_FOOTER_PLUS = 1
 
-    private var selectedId: Int = -1
-    private var selectedItemIndex: Int = RecyclerView.NO_POSITION
+    private var selectedId: Int = NO_ID
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
             if (viewType == VIEW_TYPE_ITEM)
@@ -40,7 +43,7 @@ class BackgroundsAdapter constructor(private val context: Context,
             if (position != itemCount - 1) VIEW_TYPE_ITEM else VIEW_TYPE_PLUS
 
     override fun getItemCount() =
-            data.size + FOOTER_ITEM_PLUS
+            data.size + ITEM_FOOTER_PLUS
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is ItemHolder) {
@@ -50,24 +53,42 @@ class BackgroundsAdapter constructor(private val context: Context,
         }
     }
 
-    fun onUnselect() {
-        if (selectedItemIndex != RecyclerView.NO_POSITION) {
-            notifyItemChanged(selectedItemIndex)
-
-            selectedId = -1
-            selectedItemIndex = RecyclerView.NO_POSITION
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int, payloads: MutableList<Any>) {
+        if (holder is ItemHolder) {
+            if (payloads.size > 0) {
+                holder.bindSelect(data[position])
+                return
+            }
         }
+        super.onBindViewHolder(holder, position, payloads)
     }
 
-    fun setSelected(id: Int, notify: Boolean = false) {
-        val index = data.indexOfFirst { it.id == id }
-        if (index == RecyclerView.NO_POSITION) {
+    fun unselectItem() {
+        if (selectedId == NO_ID) {
             return
         }
+        val index = data.indexOfFirst { it.id == selectedId }
+        notifyItemChanged(index)
+        selectedId = NO_ID
+    }
+
+    fun selectItem(id: Int, notify: Boolean = true, position: Int = RecyclerView.NO_POSITION) {
+        if (selectedId == id) {
+            return
+        }
+
+        val posLast = data.indexOfFirst { it.id == selectedId }
+        val pos = if (position == RecyclerView.NO_POSITION) {
+            data.indexOfFirst { it.id == id }
+        } else {
+            position
+        }
+
         selectedId = id
-        selectedItemIndex = index
+
         if (notify) {
-            notifyItemChanged(selectedItemIndex)
+            notifyItemChanged(posLast, PAYLOAD_SELECTION)
+            notifyItemChanged(pos, PAYLOAD_SELECTION)
         }
     }
 
@@ -77,26 +98,25 @@ class BackgroundsAdapter constructor(private val context: Context,
 
         init {
             itemView.setOnClickListener {
-                if (selectedItemIndex == adapterPosition) {
+                if (adapterPosition == RecyclerView.NO_POSITION) {
                     return@setOnClickListener
                 }
-                val background = data[adapterPosition]
-                siBackgrounds.setSelectedImage(true)
-
-                selectedId = background.id
-                notifyItemChanged(selectedItemIndex)
-                selectedItemIndex = adapterPosition
-
-                onItemClick?.invoke(background)
+                selectItem(selectedId, position = adapterPosition)
+                onItemClick?.invoke(data[adapterPosition])
             }
         }
 
         fun populateItem(backgroundDrawable: BackgroundDrawable) {
-            siBackgrounds.setSelectedImage(selectedId == backgroundDrawable.id)
+            bindSelect(backgroundDrawable)
             Glide.with(this.itemView)
                     .load(backgroundDrawable.getThumbnailDrawable())
                     .into(siBackgrounds)
         }
+
+        fun bindSelect(backgroundDrawable: BackgroundDrawable) {
+            siBackgrounds.setSelectedImage(selectedId == backgroundDrawable.id)
+        }
+
     }
 
     inner class PlusHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

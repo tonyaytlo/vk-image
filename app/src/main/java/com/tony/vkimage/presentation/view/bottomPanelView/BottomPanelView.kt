@@ -39,7 +39,7 @@ class BottomPanelView @JvmOverloads constructor(
         // set default selected
         val background = data.firstOrNull()
         if (background != null) {
-            adapter?.setSelected(background.id)
+            adapter?.selectItem(background.id, false, 0)
             onItemClick?.invoke(background)
         }
 
@@ -57,7 +57,7 @@ class BottomPanelView @JvmOverloads constructor(
     }
 
     fun unselectBackground() {
-        adapter?.onUnselect()
+        adapter?.unselectItem()
     }
 
 }
