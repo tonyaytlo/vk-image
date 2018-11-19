@@ -22,10 +22,11 @@ import com.tony.vkimage.presentation.interfaces.ImageSaveListener
 import com.tony.vkimage.presentation.interfaces.StickerPickListener
 import com.tony.vkimage.presentation.task.ImageSaveTask
 import com.tony.vkimage.presentation.util.ImageHelper
-import com.tony.vkimage.presentation.view.bottomPanelView.BottomPanelView
 import com.tony.vkimage.presentation.view.backgroundEditText.BackgroundEditText
+import com.tony.vkimage.presentation.view.bottomPanelView.BottomPanelView
 import com.tony.vkimage.presentation.view.movigViewsLayout.MovingViewsLayout
 import java.io.File
+import java.util.*
 
 
 class MainActivity : AppCompatActivity(), StickerPickListener, ImageSaveListener {
@@ -183,15 +184,27 @@ class MainActivity : AppCompatActivity(), StickerPickListener, ImageSaveListener
     }
 
     override fun onStickerPicked(sticker: Sticker) {
-        addSticker(sticker)
+        postDelayed({ addSticker(sticker) }, 75)
     }
 
     private fun addSticker(sticker: Sticker) {
+        val size = 120.dpToPx
         val ivSticker = ImageView(this)
         ivSticker.layoutParams =
-                MovingViewsLayout.LayoutParams(ViewGroup.LayoutParams(120.dpToPx, 120.dpToPx))
+                MovingViewsLayout.LayoutParams(ViewGroup.LayoutParams(size, size))
         ivSticker.id = View.generateViewId()
         mvMovingContainer.addView(ivSticker)
+        ivSticker.onPreDraw {
+            ivSticker.scaleX = 0F
+            ivSticker.scaleY = 0F
+
+            ivSticker.animate()
+                    .scaleX(1f)
+                    .scaleY(1f)
+                    .rotation(Random(System.currentTimeMillis()).nextInt(90) - 45F)
+                    .setDuration(300)
+                    .start()
+        }
         Glide.with(this)
                 .load(Uri.parse(sticker.imgPath))
                 .into(ivSticker)

@@ -116,7 +116,7 @@ class MovingViewsLayout @JvmOverloads constructor(
 
 
                 if (view is TrashFab) {
-                    val bottomMargin = 16.dpToPx
+                    val bottomMargin = 0.dpToPx
                     bottom = (b) - bottomMargin - t
                     top = (b - (height)) - bottomMargin - t
                 } else {
@@ -288,13 +288,18 @@ class MovingViewsLayout @JvmOverloads constructor(
         return false
     }
 
+    private val bottomMargin = 16.dpToPx.toFloat()
+
     private fun onViewSelected() {
         scale = selectedView?.scaleX ?: MIN_ZOOM
-        trash?.makeVisible()
+        trash?.animate()?.cancel()
+        trash?.animate()?.translationY(-bottomMargin)?.alpha(1F)?.start()
+
     }
 
     private fun onViewUnselected() {
-        trash?.makeInvisible()
+        trash?.animate()?.cancel()
+        trash?.animate()?.translationY(bottomMargin)?.alpha(0F)?.start()
     }
 
     override fun onRotation(rotationDetector: RotationGestureDetector) {

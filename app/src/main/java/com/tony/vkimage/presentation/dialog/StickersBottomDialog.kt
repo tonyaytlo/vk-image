@@ -7,12 +7,12 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.tony.vkimage.presentation.adapter.StickerAdapter
 import com.tony.vkimage.R
 import com.tony.vkimage.VkApp
 import com.tony.vkimage.data.entity.Sticker
-import com.tony.vkimage.presentation.interfaces.StickerPickListener
 import com.tony.vkimage.extension.bind
+import com.tony.vkimage.presentation.adapter.StickerAdapter
+import com.tony.vkimage.presentation.interfaces.StickerPickListener
 
 
 class StickersBottomDialog : BottomSheetDialogFragment() {
@@ -23,6 +23,7 @@ class StickersBottomDialog : BottomSheetDialogFragment() {
         private const val SPAN_COUNT = 4
     }
 
+    private val toolbar by bind<ViewGroup>(R.id.toolbar)
     private val rvStickers by bind<RecyclerView>(R.id.rvStickers)
 
     private var stickerPickListener: StickerPickListener? = null
@@ -49,6 +50,13 @@ class StickersBottomDialog : BottomSheetDialogFragment() {
     private fun initRecycler() {
         rvStickers.setHasFixedSize(true)
         rvStickers.layoutManager = GridLayoutManager(activity, SPAN_COUNT)
+        rvStickers.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
+                val offset = recyclerView?.computeVerticalScrollOffset()
+                toolbar.isSelected = offset != 0
+
+            }
+        })
     }
 
     private fun getStickers() {

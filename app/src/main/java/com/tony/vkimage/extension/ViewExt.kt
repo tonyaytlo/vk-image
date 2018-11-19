@@ -1,7 +1,11 @@
 package com.tony.vkimage.extension
 
+import android.app.Activity
 import android.content.Context
+import android.os.Handler
+import android.os.Looper
 import android.view.View
+import android.view.ViewTreeObserver
 import android.widget.EditText
 import android.widget.Toast
 
@@ -35,4 +39,19 @@ fun EditText.hideCursor() {
 
 fun EditText.showCursor() {
     isCursorVisible = true
+}
+
+fun Activity.postDelayed(i: () -> Unit, mls: Long = 0L) {
+    Handler(Looper.getMainLooper()).postDelayed(i, mls)
+}
+
+inline fun View.onPreDraw(crossinline f: () -> Unit) = with(viewTreeObserver) {
+    addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
+        override fun onGlobalLayout() {
+            if (viewTreeObserver.isAlive) {
+                viewTreeObserver.removeOnGlobalLayoutListener(this)
+            }
+            f()
+        }
+    })
 }
