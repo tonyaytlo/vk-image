@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.tony.vkimage.presentation.view.SquareConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.tony.vkimage.presentation.view.SquareFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -7,4 +7,4 @@
         android:id="@+id/ivSticker"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
-</com.tony.vkimage.presentation.view.SquareConstraintLayout>
+</com.tony.vkimage.presentation.view.SquareFrameLayout>

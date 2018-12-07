@@ -31,6 +31,12 @@ import java.util.*
 
 class MainActivity : AppCompatActivity(), StickerPickListener, ImageSaveListener {
 
+    companion object {
+        private const val REQUEST_PERMISSIONS_GALLERY = 1
+        private const val REQUEST_IMAGE = 2
+        private const val REQUEST_IMAGE_SAVE = 3
+    }
+
     private val root by bind<ViewGroup>(R.id.root)
     private val toolbar by bind<Toolbar>(R.id.toolbar)
     private val flImage by bind<View>(R.id.flImage)
@@ -38,10 +44,6 @@ class MainActivity : AppCompatActivity(), StickerPickListener, ImageSaveListener
     private val mvMovingContainer by bind<MovingViewsLayout>(R.id.rlContainer)
     private val etStoryText by bind<BackgroundEditText>(R.id.etStoryText)
     private val bpPanel by bind<BottomPanelView>(R.id.bpPanel)
-
-    private val REQUEST_PERMISSIONS_GALLERY = 1
-    private val REQUEST_IMAGE = 2
-    private val REQUEST_IMAGE_SAVE = 3
 
     private val etStylesBackground = intArrayOf(
             BackgroundEditText.STYLE_ROUND_RECT_BACKGROUND,
@@ -121,7 +123,6 @@ class MainActivity : AppCompatActivity(), StickerPickListener, ImageSaveListener
         }
     }
 
-
     private fun saveImage() {
         if (isPermissionsGranted(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
             hideKeyboard()
@@ -162,7 +163,6 @@ class MainActivity : AppCompatActivity(), StickerPickListener, ImageSaveListener
             super.onOptionsItemSelected(item)
         }
     }
-
 
     private fun openStickersDialog() {
         hideKeyboard()

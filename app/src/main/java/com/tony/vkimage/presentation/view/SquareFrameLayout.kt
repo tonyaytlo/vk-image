@@ -6,7 +6,7 @@ import android.util.AttributeSet
 import android.widget.FrameLayout
 import com.tony.vkimage.R
 
-class SquareConstraintLayout @JvmOverloads constructor(
+class SquareFrameLayout @JvmOverloads constructor(
         context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : FrameLayout(context, attrs, defStyleAttr) {
 
@@ -17,11 +17,11 @@ class SquareConstraintLayout @JvmOverloads constructor(
         if (attrs != null) {
             val array = context.theme.obtainStyledAttributes(
                     attrs,
-                    R.styleable.SquareConstraintLayout,
+                    R.styleable.SquareFrameLayout,
                     0, 0
             )
             try {
-                horizontal = array.getBoolean(R.styleable.SquareConstraintLayout_horizontal, true)
+                horizontal = array.getBoolean(R.styleable.SquareFrameLayout_horizontal, true)
             } finally {
                 array.recycle()
             }

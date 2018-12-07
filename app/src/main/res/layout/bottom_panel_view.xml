@@ -9,7 +9,7 @@
         android:id="@+id/rvBackgrounds"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginEnd="6dp"
+        android:layout_marginEnd="@dimen/margin_padding_xtiny"
         app:layout_constraintBottom_toBottomOf="@+id/btnSave"
         app:layout_constraintEnd_toStartOf="@+id/vDividerV"
         app:layout_constraintStart_toStartOf="parent"
@@ -18,7 +18,7 @@
 
     <View
         android:id="@+id/vDividerV"
-        android:layout_width="0.4dp"
+        android:layout_width="@dimen/divider_height"
         android:layout_height="0dp"
         android:layout_marginEnd="16dp"
         android:background="@color/colorDivider"
@@ -29,10 +29,10 @@
     <Button
         android:id="@+id/btnSave"
         android:layout_width="wrap_content"
-        android:layout_height="34dp"
-        android:layout_marginTop="12dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="12dp"
+        android:layout_height="@dimen/button_height"
+        android:layout_marginTop="@dimen/margin_padding_xsmall"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin"
+        android:layout_marginBottom="@dimen/margin_padding_xsmall"
         android:background="@drawable/btn_round"
         android:text="@string/btn_save"
         android:textColor="@android:color/white"
@@ -43,7 +43,7 @@
     <View
         android:id="@+id/vDividerH"
         android:layout_width="0dp"
-        android:layout_height="0.4dp"
+        android:layout_height="@dimen/divider_height"
         android:background="@color/colorDivider"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

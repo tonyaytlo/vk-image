@@ -20,7 +20,7 @@
             android:layout_gravity="center"
             android:text="@string/title"
             android:textColor="@color/colorToolbarTitle"
-            android:textSize="18sp"
+            android:textSize="@dimen/text_size_xxnormal"
             android:textStyle="bold" />
 
 
@@ -53,9 +53,9 @@
             android:layout_gravity="center"
             android:hint="@string/et_story_hint"
             android:inputType="textMultiLine|textVisiblePassword"
-            android:paddingLeft="8dp"
-            android:paddingRight="8dp"
-            android:textSize="26sp"
+            android:paddingLeft="@dimen/margin_padding_small"
+            android:paddingRight="@dimen/margin_padding_small"
+            android:textSize="@dimen/text_size_xlarge"
             android:textStyle="bold" />
 
     </FrameLayout>
