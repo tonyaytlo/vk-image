@@ -95,7 +95,7 @@ class BackgroundEditText : AppCompatEditText {
             return
         }
         bAlpha = alpha
-        bPaint.alpha = bAlpha
+        setupPaint()
         invalidate()
     }
 
@@ -106,7 +106,7 @@ class BackgroundEditText : AppCompatEditText {
             return
         }
         bColor = color
-        bPaint.color = bColor
+        setupPaint()
         invalidate()
     }
 
@@ -115,8 +115,8 @@ class BackgroundEditText : AppCompatEditText {
             return
         }
         bCornerRadius = radius
-        bPaint.pathEffect = CornerPathEffect(radius)
         preparePath()
+        setupPaint()
         invalidate()
     }
 
@@ -128,6 +128,7 @@ class BackgroundEditText : AppCompatEditText {
         }
         bSmoothing = width
         preparePath()
+        setupPaint()
         invalidate()
     }
 
@@ -155,6 +156,7 @@ class BackgroundEditText : AppCompatEditText {
             }
             else -> return
         }
+        setupPaint()
         invalidate()
     }
 
@@ -202,7 +204,6 @@ class BackgroundEditText : AppCompatEditText {
             }
             i++
         }
-
         onLayoutBackground()
     }
 
