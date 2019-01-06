@@ -11,7 +11,7 @@ import android.view.inputmethod.InputMethodManager
 
 val Int.dpToPx: Int get() = (this * Resources.getSystem().displayMetrics.density).toInt()
 
-fun Context.getColorRes(colorId: Int) = ContextCompat.getColor(this, colorId)
+fun Context.getColorFromRes(colorId: Int) = ContextCompat.getColor(this, colorId)
 
 fun AppCompatActivity.hideKeyboard() {
     if (currentFocus != null) {
@@ -26,7 +26,6 @@ fun View.showKeyboard() {
     }
     val imm = context.applicationContext.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
     imm.showSoftInput(this, InputMethodManager.SHOW_IMPLICIT)
-
 }
 
 fun IntArray.isPermissionsGranted(): Boolean {

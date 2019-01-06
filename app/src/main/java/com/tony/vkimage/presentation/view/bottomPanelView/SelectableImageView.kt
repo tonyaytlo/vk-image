@@ -6,7 +6,7 @@ import android.util.AttributeSet
 import android.widget.ImageView
 import com.tony.vkimage.R
 import com.tony.vkimage.extension.dpToPx
-import com.tony.vkimage.extension.getColorRes
+import com.tony.vkimage.extension.getColorFromRes
 
 //may optimize
 // fix round -> background drawable, background
@@ -32,7 +32,7 @@ class SelectableImageView @JvmOverloads constructor(
 
 
     init {
-        pOutBorder.color = context.getColorRes(R.color.colorBtn)
+        pOutBorder.color = context.getColorFromRes(R.color.colorBtn)
         pOutBorder.style = Paint.Style.STROKE
         pOutBorder.strokeWidth = borderWidth + 1
 

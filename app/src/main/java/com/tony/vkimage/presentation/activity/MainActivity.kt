@@ -10,8 +10,6 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.view.*
 import android.widget.ImageView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.RequestOptions
 import com.tony.vkimage.R
 import com.tony.vkimage.VkApp
@@ -26,7 +24,6 @@ import com.tony.vkimage.presentation.view.backgroundEditText.BackgroundEditText
 import com.tony.vkimage.presentation.view.bottomPanelView.BottomPanelView
 import com.tony.vkimage.presentation.view.movigViewsLayout.MovingViewsLayout
 import java.io.File
-import java.util.*
 
 
 class MainActivity : AppCompatActivity(), StickerPickListener, ImageSaveListener {
@@ -52,9 +49,11 @@ class MainActivity : AppCompatActivity(), StickerPickListener, ImageSaveListener
     private var etStyleIndex = 0
 
     private var globalLayoutListener: ViewTreeObserver.OnGlobalLayoutListener? = null
-    private var keyboardVisible = false
+    private var isKeyboardVisible = false
     private var isFirstOpen = true
-    private val requestOptions = RequestOptions().override(700, 500)
+    private val glideRequestOptions by lazy {
+        RequestOptions().override(700, 500).centerCrop()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -71,20 +70,17 @@ class MainActivity : AppCompatActivity(), StickerPickListener, ImageSaveListener
             val keyboardHeight = rootHeight - root.height
             val isKeyboardNowVisible = keyboardHeight > rootHeight * 0.15
 
-            if (keyboardVisible != isKeyboardNowVisible) {
+            if (isKeyboardVisible != isKeyboardNowVisible) {
                 if (isKeyboardNowVisible) {
                     if (isFirstOpen) {
                         setBackgroundSize(rootHeight - keyboardHeight)
-                        //На самом деле это не гарантирует то что размер изображения будет в итоге совпадать с минимальным свободным местом
-                        //так как высота клавитуры не константа
-                        //root.viewTreeObserver.removeOnGlobalLayoutListener(globalLayoutListener)// CHECK CASE (MIN HEIGHT)
                     }
                     etStoryText.showCursor()
                 } else {
                     etStoryText.hideCursor()
                 }
             }
-            keyboardVisible = isKeyboardNowVisible
+            isKeyboardVisible = isKeyboardNowVisible
         }
         root.viewTreeObserver.addOnGlobalLayoutListener(globalLayoutListener)
     }
@@ -105,17 +101,14 @@ class MainActivity : AppCompatActivity(), StickerPickListener, ImageSaveListener
 
     private fun setViewListeners() {
         etStoryText.setOnClickListener { etStoryText.showCursor() }
-        bpPanel.getSaveBtn().setOnClickListener { saveImage() }
+        bpPanel.getSaveButton().setOnClickListener { saveImage() }
         bpPanel.setOnAddClickListener { openGallery() }
         bpPanel.setOnItemClickListener {
-            Glide.with(this)
-                    .load(it.getDrawable())
-                    .transition(DrawableTransitionOptions.withCrossFade(400))
-                    .into(ivBackground)
+            ivBackground.loadImageFromDrawableWithTransition(it.getDrawable())
         }
         ivBackground.setOnTouchListener { _, motionEvent ->
             if (motionEvent.action == MotionEvent.ACTION_DOWN) {
-                if (!keyboardVisible) {
+                if (!isKeyboardVisible) {
                     etStoryText.showKeyboard()
                 }
             }
@@ -193,21 +186,12 @@ class MainActivity : AppCompatActivity(), StickerPickListener, ImageSaveListener
         ivSticker.layoutParams =
                 MovingViewsLayout.LayoutParams(ViewGroup.LayoutParams(size, size))
         ivSticker.id = View.generateViewId()
+
         mvMovingContainer.addView(ivSticker)
         ivSticker.onPreDraw {
-            ivSticker.scaleX = 0F
-            ivSticker.scaleY = 0F
-
-            ivSticker.animate()
-                    .scaleX(1f)
-                    .scaleY(1f)
-                    .rotation(Random(System.currentTimeMillis()).nextInt(90) - 45F)
-                    .setDuration(300)
-                    .start()
+            ivSticker.startFadeAnimation()
         }
-        Glide.with(this)
-                .load(Uri.parse(sticker.imgPath))
-                .into(ivSticker)
+        ivSticker.loadImageFromUri(Uri.parse(sticker.imgPath))
     }
 
     override fun onSuccessSave(file: File) {
@@ -232,10 +216,7 @@ class MainActivity : AppCompatActivity(), StickerPickListener, ImageSaveListener
                     val path = getPath(selectedImageUri) ?: selectedImageUri.path
                     if (path.isImagePath()) {
                         bpPanel.unselectBackground()
-                        Glide.with(this)
-                                .load(path)
-                                .apply(requestOptions.centerCrop())
-                                .into(ivBackground)
+                        ivBackground.loadImageFromUrl(path, glideRequestOptions)
                     } else {
                         showToast(getString(R.string.error_image_type))
                     }

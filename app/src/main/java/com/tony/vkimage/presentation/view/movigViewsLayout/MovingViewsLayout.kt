@@ -21,6 +21,9 @@ import com.tony.vkimage.presentation.view.movigViewsLayout.detectors.RotationGes
 import com.tony.vkimage.extension.dpToPx
 
 
+/*
+* This class need refactoring
+* */
 class MovingViewsLayout @JvmOverloads constructor(
         context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : ViewGroup(context, attrs, defStyleAttr), RotationGestureDetector.OnRotationGestureListener,

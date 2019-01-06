@@ -16,6 +16,9 @@ import android.support.v4.app.ActivityCompat
 import android.support.v7.app.AppCompatActivity
 
 
+/*
+* This class has some bugs (img not picked) and need complex refactoring
+* */
 fun AppCompatActivity.openGalleryIntent(
         selectRequestCode: Int,
         permissionRequestCode: Int,

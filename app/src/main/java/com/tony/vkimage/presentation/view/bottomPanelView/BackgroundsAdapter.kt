@@ -5,11 +5,12 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.bumptech.glide.Glide
 import com.tony.vkimage.R
 import com.tony.vkimage.data.entity.BackgroundDrawable
 import com.tony.vkimage.extension.bind
-import com.tony.vkimage.extension.getColorRes
+import com.tony.vkimage.extension.getColorFromRes
+import com.tony.vkimage.extension.loadImageFromDrawable
+import com.tony.vkimage.extension.loadImageFromDrawableRes
 
 class BackgroundsAdapter constructor(private val context: Context,
                                      var data: MutableList<BackgroundDrawable>,
@@ -93,9 +94,7 @@ class BackgroundsAdapter constructor(private val context: Context,
 
         fun populateItem(backgroundDrawable: BackgroundDrawable) {
             siBackgrounds.setSelectedImage(selectedId == backgroundDrawable.id)
-            Glide.with(this.itemView)
-                    .load(backgroundDrawable.getThumbnailDrawable())
-                    .into(siBackgrounds)
+            siBackgrounds.loadImageFromDrawable(backgroundDrawable.getThumbnailDrawable())
         }
     }
 
@@ -110,10 +109,8 @@ class BackgroundsAdapter constructor(private val context: Context,
         }
 
         fun populatePlusItem() {
-            siBackgrounds.setBackgroundColor(context.getColorRes(R.color.colorPlusBackground))
-            Glide.with(this.itemView)
-                    .load(R.drawable.ic_toolbar_new)
-                    .into(siBackgrounds)
+            siBackgrounds.setBackgroundColor(context.getColorFromRes(R.color.colorPlusBackground))
+            siBackgrounds.loadImageFromDrawableRes(R.drawable.ic_toolbar_new)
 
         }
     }

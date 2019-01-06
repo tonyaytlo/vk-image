@@ -13,6 +13,9 @@ import com.tony.vkimage.extension.dpToPx
 import com.tony.vkimage.extension.trimLine
 import kotlin.math.absoluteValue
 
+/*
+* This class need some refactoring
+* */
 class BackgroundEditText : AppCompatEditText {
 
     companion object {

@@ -7,10 +7,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import com.bumptech.glide.Glide
 import com.tony.vkimage.R
 import com.tony.vkimage.data.entity.Sticker
 import com.tony.vkimage.extension.bind
+import com.tony.vkimage.extension.loadImageFromUri
 
 
 class StickerAdapter constructor(private val context: Context, var data: MutableList<Sticker>,
@@ -41,9 +41,7 @@ class StickerAdapter constructor(private val context: Context, var data: Mutable
         }
 
         fun populate(sticker: Sticker) {
-            Glide.with(itemView)
-                    .load(Uri.parse(sticker.imgPath))
-                    .into(ivImage)
+            ivImage.loadImageFromUri(Uri.parse(sticker.imgPath))
         }
     }
 }

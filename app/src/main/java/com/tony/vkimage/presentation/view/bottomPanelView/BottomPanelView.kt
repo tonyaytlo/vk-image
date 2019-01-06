@@ -9,7 +9,6 @@ import android.widget.Button
 import com.tony.vkimage.R
 import com.tony.vkimage.data.entity.BackgroundDrawable
 import com.tony.vkimage.extension.bind
-import com.tony.vkimage.extension.dpToPx
 
 class BottomPanelView @JvmOverloads constructor(
         context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
@@ -31,7 +30,7 @@ class BottomPanelView @JvmOverloads constructor(
         rvBackground.setHasFixedSize(true)
         rvBackground.itemAnimator = null // disable default animation
         rvBackground.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-        rvBackground.addItemDecoration(HorizontalOffsetDecoration(14.dpToPx))
+        rvBackground.addItemDecoration(HorizontalOffsetDecoration())
     }
 
     fun showBackground(data: MutableList<BackgroundDrawable>) {
@@ -42,11 +41,10 @@ class BottomPanelView @JvmOverloads constructor(
             adapter?.setSelected(background.id)
             onItemClick?.invoke(background)
         }
-
         rvBackground.adapter = adapter
     }
 
-    fun getSaveBtn() = btnSave
+    fun getSaveButton() = btnSave
 
     fun setOnItemClickListener(onItemClick: ((BackgroundDrawable) -> Unit)? = null) {
         this.onItemClick = onItemClick

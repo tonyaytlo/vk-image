@@ -12,7 +12,7 @@ class StickerMapper {
     fun mapEntity(strings: Array<String?>): MutableList<Sticker> {
         val stickers = mutableListOf<Sticker>()
         strings.forEach {
-            if (it != null) {
+            if (it?.isNotEmpty() == true) {
                 stickers.add(Sticker("$assetsPath/$it"))
             }
         }
