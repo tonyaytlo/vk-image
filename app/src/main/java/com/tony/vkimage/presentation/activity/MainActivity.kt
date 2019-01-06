@@ -1,6 +1,7 @@
 package com.tony.vkimage.presentation.activity
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri
@@ -99,6 +100,7 @@ class MainActivity : AppCompatActivity(), StickerPickListener, ImageSaveListener
         }
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private fun setViewListeners() {
         etStoryText.setOnClickListener { etStoryText.showCursor() }
         bpPanel.getSaveButton().setOnClickListener { saveImage() }
@@ -152,9 +154,7 @@ class MainActivity : AppCompatActivity(), StickerPickListener, ImageSaveListener
             true
         }
 
-        else -> {
-            super.onOptionsItemSelected(item)
-        }
+        else -> super.onOptionsItemSelected(item)
     }
 
     private fun openStickersDialog() {
@@ -181,16 +181,14 @@ class MainActivity : AppCompatActivity(), StickerPickListener, ImageSaveListener
     }
 
     private fun addSticker(sticker: Sticker) {
-        val size = 120.dpToPx
+        val sizeSticker = 120.dpToPx
         val ivSticker = ImageView(this)
         ivSticker.layoutParams =
-                MovingViewsLayout.LayoutParams(ViewGroup.LayoutParams(size, size))
+                MovingViewsLayout.LayoutParams(ViewGroup.LayoutParams(sizeSticker, sizeSticker))
         ivSticker.id = View.generateViewId()
 
         mvMovingContainer.addView(ivSticker)
-        ivSticker.onPreDraw {
-            ivSticker.startFadeAnimation()
-        }
+        ivSticker.onPreDraw { ivSticker.startFadeAnimation() }
         ivSticker.loadImageFromUri(Uri.parse(sticker.imgPath))
     }
 

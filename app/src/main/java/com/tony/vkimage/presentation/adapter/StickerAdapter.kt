@@ -15,22 +15,20 @@ import com.tony.vkimage.extension.loadImageFromUri
 
 class StickerAdapter constructor(private val context: Context, var data: MutableList<Sticker>,
                                  var onItemClick: ((Sticker) -> Unit)? = null)
-    : RecyclerView.Adapter<StickerAdapter.Holder>() {
+    : RecyclerView.Adapter<StickerAdapter.StickerHolder>() {
 
-    private val inflater
-            by lazy { context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater }
-
+    private val inflater by lazy { LayoutInflater.from(context) }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
-            Holder(inflater.inflate(R.layout.item_sticker, parent, false))
+            StickerHolder(inflater.inflate(R.layout.item_sticker, parent, false))
 
     override fun getItemCount() = data.size
 
-    override fun onBindViewHolder(holder: Holder, position: Int) {
+    override fun onBindViewHolder(holder: StickerHolder, position: Int) {
         holder.populate(data[position])
     }
 
-    inner class Holder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class StickerHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         private val ivImage by bind<ImageView>(R.id.ivSticker)
 
